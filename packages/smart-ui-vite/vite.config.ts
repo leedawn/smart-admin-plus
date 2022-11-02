@@ -20,7 +20,7 @@ export default defineConfig({
       entry: "./src/entry.ts",
       name: "SmartUI",
       fileName: "smart-ui",
-      formats: ["esm", "umd", "iife"],
+      formats: ["es", "umd", "iife"],
     },
   },
 });
