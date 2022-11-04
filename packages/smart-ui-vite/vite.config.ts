@@ -17,7 +17,9 @@ export default defineConfig({
   plugins: [vue(), vueJsx(), Unocss()],
   build: {
     rollupOptions,
-    minify: false,
+    minify: "terser",
+    sourcemap: true,
+    reportCompressedSize: true, // 生成压缩大小报告
     cssCodeSplit: true,
     lib: {
       entry: "./src/entry.ts",
