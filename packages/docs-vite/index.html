@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import SmartUI from "smart-ui-vite/dist/smart-ui.mjs";
+      import { createApp } from "vue/dist/vue.esm-bundler.js";
+      import 'smart-ui-vite/dist/assets/entry.d2de1b65.css'
+
+      createApp({
+        template: `
+          <UButton color="gray" icon="search">gray button</UButton>
+          <UButton color="red" icon="edit">red button</UButton>
+          <UButton color="yellow" icon="check">red button</UButton>
+          `,
+      })
+        .use(SmartUI)
+        .mount("#app");
+    </script>
+  </body>
+</html>
