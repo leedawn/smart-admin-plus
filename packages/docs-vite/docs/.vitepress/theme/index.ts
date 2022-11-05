@@ -1,6 +1,6 @@
 import Theme from "vitepress/dist/client/theme-default";
 import SmartUI from "smart-ui-vite/dist/smart-ui.mjs";
-import "smart-ui-vite/dist/assets/entry.1a9e7183.css";
+import "smart-ui-vite/dist/assets/entry.css";
 
 import Demo from "vitepress-theme-demoblock/components/Demo.vue";
 import DemoBlock from "vitepress-theme-demoblock/components/DemoBlock.vue";
