@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "vite"
+    "dev": "vite",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +15,10 @@
   "dependencies": {
     "smart-ui-vite": "workspace:^1.0.0",
     "vue": "^3.2.41"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue-jsx": "^2.1.0",
+    "vitepress": "0.22.4",
+    "vitepress-theme-demoblock": "^1.4.2"
   }
 }

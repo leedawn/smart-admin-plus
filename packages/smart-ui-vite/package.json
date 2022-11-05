@@ -17,6 +17,7 @@
     "@iconify-json/ic": "^1.1.9",
     "@vitejs/plugin-vue": "^3.2.0",
     "@vitejs/plugin-vue-jsx": "^2.1.0",
+    "terser": "^5.15.1",
     "unocss": "^0.46.3"
   }
 }
