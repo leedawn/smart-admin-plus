@@ -9,7 +9,8 @@
     "test": "vitest",
     "lint": "eslint --fix --ext .ts,.vue src",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.vue\"",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test:run": "vitest run"
   },
   "keywords": [],
   "author": "",
@@ -36,6 +37,7 @@
     "prettier": "^2.7.1",
     "terser": "^5.15.1",
     "typescript": "^4.8.4",
-    "unocss": "^0.46.3"
+    "unocss": "^0.46.3",
+    "vitest": "^0.24.5"
   }
 }
