@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  Lint:
+  #   Lint:
   UnitTest:
     runs-on: ubuntu-latest
     steps:
