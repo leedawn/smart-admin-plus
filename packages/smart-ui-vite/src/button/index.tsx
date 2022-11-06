@@ -1,9 +1,9 @@
 import { defineComponent, PropType } from "vue";
 import "uno.css";
 
-export type IColor = "red" | "gray" | "yellow";
-export type IIcon = "search" | "edit" | "check";
-export const props = {
+type IColor = "red" | "gray" | "yellow";
+type IIcon = "search" | "edit" | "check";
+const props = {
   color: {
     type: String as PropType<IColor>,
     default: "blue",
@@ -19,7 +19,7 @@ export default defineComponent({
   setup(props, { slots }) {
     return () => (
       <button
-        class={`py-2 bg-${props.color}-500 hover:bg-green-700 border-none`}
+        class={`py-2 bg-${props.color}-500 hover:bg-${props.color}-700 border-none`}
       >
         {!props.icon ? "" : <i class={`i-ic-baseline-${props.icon} p-3`}></i>}
         {slots.default ? slots.default() : ""}
