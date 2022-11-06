@@ -1,6 +1,6 @@
 const sidebar = {
   "/": [
-    { text: "快速开始", link: "/" },
+    { text: "快速开始" },
     { text: "通用", children: [{ text: "Button 按钮", link: "/" }] },
     { text: "导航" },
     { text: "反馈" },
