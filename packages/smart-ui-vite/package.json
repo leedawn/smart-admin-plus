@@ -25,6 +25,7 @@
     "@vitejs/plugin-vue": "^3.2.0",
     "@vitejs/plugin-vue-jsx": "^2.1.0",
     "@vitest/coverage-c8": "^0.24.5",
+    "@vitest/coverage-istanbul": "^0.24.5",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/test-utils": "^2.2.1",
     "babel-eslint": "^10.1.0",
