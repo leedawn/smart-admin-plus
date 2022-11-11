@@ -1,10 +1,12 @@
 <template>
-  <div>
-    <RouterLink to="/">默认</RouterLink>
-    <RouterLink to="/timeline">时间轴</RouterLink>
-  </div>
+  <TopMenu />
   <RouterView />
 </template>
+
+<script setup lang="ts">
+import TopMenu from "./components/top-menu.vue";
+</script>
+
 <style>
 body {
   background: #eee;

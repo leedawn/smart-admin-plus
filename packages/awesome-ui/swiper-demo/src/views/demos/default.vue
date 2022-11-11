@@ -1,9 +1,10 @@
 <template>
   <div :class="$style.wrapper">
     <swiper
-      :modules="[Navigation, Pagination, Scrollbar, A11y]"
+      :modules="[Navigation, Pagination, Scrollbar, A11y, Grid]"
       :slides-per-view="3"
       :space-between="50"
+      :grid="{ rows: 2 }"
       :navigation="{ enabled: true }"
       :pagination="{ clickable: true, type: 'fraction' }"
       :scrollbar="{ draggable: true, dragSize: 2 }"
@@ -18,19 +19,19 @@
       <swiper-slide>Slide 4</swiper-slide><swiper-slide>Slide 5</swiper-slide>
       <swiper-slide>Slide 6</swiper-slide><swiper-slide>Slide 7</swiper-slide>
       <swiper-slide>Slide 8</swiper-slide><swiper-slide>Slide 9</swiper-slide>
-      <template v-slot:wrapper-start><span>container-start</span></template>
+      <!-- <template v-slot:wrapper-start><span>container-start</span></template> -->
     </swiper>
-    <button @click="next">next</button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Swiper, SwiperSlide, useSwiper, useSwiperSlide } from "swiper/vue";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Navigation, Pagination, Scrollbar, A11y, Grid } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import "swiper/css/grid";
 
 const onSwiper = (swiper) => {
   console.log(swiper);
@@ -40,11 +41,6 @@ const onClideChange = () => {
 };
 const reachEnd = (swiper) => {
   console.log(swiper);
-};
-// const swiper = useSwiper();
-// const swiperSlide = useSwiperSlide();
-const next = () => {
-  // swiper.slideNext();
 };
 </script>
 
@@ -61,6 +57,7 @@ const next = () => {
     text-align: center;
     font-size: 18px;
     background: #fff;
+    height: calc((100% - 120px) / 2);
 
     display: -webkit-box;
     display: -ms-flexbox;
