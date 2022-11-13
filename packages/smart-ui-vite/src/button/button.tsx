@@ -10,7 +10,6 @@ export const props = {
   },
   icon: {
     type: String as PropType<IIcon>,
-    default: "search",
   },
 };
 export default defineComponent({
@@ -18,7 +17,9 @@ export default defineComponent({
   props,
   setup(props, { slots }) {
     return () => (
-      <button class={`py-2 bg-${props.color}-500 hover:bg-green-700 border-none`}>
+      <button
+        class={`py-2 bg-${props.color}-500 hover:bg-green-700 border-none`}
+      >
         {!props.icon ? "" : <i class={`i-ic-baseline-${props.icon} p-3`}></i>}
         {slots.default ? slots.default() : ""}
       </button>
