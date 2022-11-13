@@ -1,0 +1,125 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 3,
+    "total": 3,
+    "workspacePrefix": "/Users/admin/Documents/my-github/smart-admin-plus"
+  },
+  "1 debug pnpm:package-manifest": {
+    "initial": {
+      "name": "smart-admin-plus",
+      "version": "1.0.0",
+      "description": "",
+      "main": "index.js",
+      "homepage": "https://smart-admin-plus.vercel.app/",
+      "scripts": {
+        "preinstall": "npx only-allow pnpm",
+        "prepare": "husky install"
+      },
+      "keywords": [],
+      "author": "",
+      "license": "ISC",
+      "devDependencies": {
+        "@commitlint/cli": "^17.2.0",
+        "@commitlint/config-conventional": "^17.2.0",
+        "husky": "^8.0.1",
+        "vite": "^3.2.1"
+      }
+    },
+    "prefix": "/Users/admin/Documents/my-github/smart-admin-plus"
+  },
+  "2 debug pnpm:package-manifest": {
+    "initial": {
+      "name": "docs-vite",
+      "version": "1.0.0",
+      "description": "",
+      "main": "index.js",
+      "scripts": {
+        "dev": "vite"
+      },
+      "keywords": [],
+      "author": "",
+      "license": "ISC",
+      "dependencies": {
+        "smart-ui-vite": "workspace:^1.0.0",
+        "vue": "^3.2.41"
+      },
+      "devDependencies": {
+        "@vitejs/plugin-vue-jsx": "^2.1.0",
+        "vitepress": "0.22.4",
+        "vitepress-theme-demoblock": "^1.4.2"
+      }
+    },
+    "prefix": "/Users/admin/Documents/my-github/smart-admin-plus/packages/docs-vite"
+  },
+  "3 debug pnpm:package-manifest": {
+    "initial": {
+      "name": "mock-ui-vite-plus",
+      "version": "1.0.0",
+      "description": "",
+      "main": "index.js",
+      "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "test": "vitest",
+        "lint": "eslint --fix --ext .ts,.vue src",
+        "format": "prettier --write \"src/**/*.ts\" \"src/**/*.vue\"",
+        "test:run": "vitest run",
+        "coverage": "vitest run --coverage",
+        "docs:dev": "vitepress dev docs",
+        "docs:build": "vitepress build docs",
+        "docs:serve": "vitepress serve docs"
+      },
+      "keywords": [],
+      "author": "",
+      "license": "ISC",
+      "dependencies": {
+        "vue": "^3.2.41"
+      },
+      "devDependencies": {
+        "@iconify-json/ic": "^1.1.9",
+        "@typescript-eslint/eslint-plugin": "^5.42.0",
+        "@typescript-eslint/parser": "^5.42.0",
+        "@vitejs/plugin-vue": "^3.2.0",
+        "@vitejs/plugin-vue-jsx": "^2.1.0",
+        "@vitest/coverage-c8": "^0.24.5",
+        "@vitest/coverage-istanbul": "^0.24.5",
+        "@vue/eslint-config-prettier": "^7.0.0",
+        "@vue/test-utils": "^2.2.1",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^8.26.0",
+        "eslint-formatter-pretty": "^4.1.0",
+        "eslint-plugin-json": "^3.1.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-vue": "^9.7.0",
+        "happy-dom": "^7.6.6",
+        "prettier": "^2.7.1",
+        "terser": "^5.15.1",
+        "typescript": "^4.8.4",
+        "unocss": "^0.46.3",
+        "vitepress": "0.22.4",
+        "vitepress-theme-demoblock": "^1.4.2",
+        "vitest": "^0.24.5"
+      }
+    },
+    "prefix": "/Users/admin/Documents/my-github/smart-admin-plus/packages/smart-ui-vite"
+  },
+  "4 debug pnpm:context": {
+    "currentLockfileExists": false,
+    "storeDir": "/Users/admin/.pnpm-store/v3",
+    "virtualStoreDir": "/Users/admin/Documents/my-github/smart-admin-plus/node_modules/.pnpm"
+  },
+  "5 debug pnpm:stage": {
+    "prefix": "/Users/admin/Documents/my-github/smart-admin-plus",
+    "stage": "resolution_started"
+  },
+  "6 error pnpm": {
+    "code": "ERR_PNPM_NO_MATCHING_VERSION_INSIDE_WORKSPACE",
+    "pkgsStack": [],
+    "err": {
+      "name": "pnpm",
+      "message": "In packages/docs-vite: No matching version found for smart-ui-vite@^1.0.0 inside the workspace",
+      "code": "ERR_PNPM_NO_MATCHING_VERSION_INSIDE_WORKSPACE",
+      "stack": "pnpm: In packages/docs-vite: No matching version found for smart-ui-vite@^1.0.0 inside the workspace\n    at tryResolveFromWorkspace (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:85172:15)\n    at resolveNpm (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:85063:39)\n    at Object.resolve (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:85295:40)\n    at ctx.requestsQueue.add.priority (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:71286:75)\n    at run (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:71033:90)\n    at PQueue._tryToStartAnother (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:70987:13)\n    at /usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:71046:16\n    at new Promise (<anonymous>)\n    at PQueue.add (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:71028:16)\n    at resolveAndFetch (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:71286:55)"
+    }
+  }
+}
