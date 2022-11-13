@@ -1,0 +1,15 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1,
+    "workspacePrefix": "/Users/admin/Documents/my-github/smart-admin-plus"
+  },
+  "1 error pnpm": {
+    "code": "ERR_PNPM_REGISTRIES_MISMATCH",
+    "err": {
+      "name": "pnpm",
+      "message": "This modules directory was created using the following registries configuration: {\"default\":\"https://packages.aliyun.com/5eb501ef3fd198000181afca/npm/npm-registry/\"}. The current configuration is {\"default\":\"https://registry.npm.taobao.org/\"}. To recreate the modules directory using the new settings, run \"pnpm install\".",
+      "code": "ERR_PNPM_REGISTRIES_MISMATCH",
+      "stack": "pnpm: This modules directory was created using the following registries configuration: {\"default\":\"https://packages.aliyun.com/5eb501ef3fd198000181afca/npm/npm-registry/\"}. The current configuration is {\"default\":\"https://registry.npm.taobao.org/\"}. To recreate the modules directory using the new settings, run \"pnpm install\".\n    at validateModules (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:91092:15)\n    at async getContext (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:90964:28)\n    at async mutateModules (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:115001:19)\n    at async recursive (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:116861:29)\n    at async handler (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:117158:11)\n    at async /usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:133995:20\n    at async run (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:133970:34)\n    at async runPnpm (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:134181:5)\n    at async /usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:134173:7"
+    }
+  }
+}
