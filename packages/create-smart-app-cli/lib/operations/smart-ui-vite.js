@@ -2,11 +2,10 @@ import clone from "../utils/clone.js";
 import inquirer from "inquirer";
 import { resolve } from "path";
 import fs from "fs";
-
 import chalk from "chalk";
-const log = (...args) => console.log(chalk.green(...args));
-
 import handlebars from "handlebars";
+
+const log = (...args) => console.log(chalk.green(...args));
 
 export default async () => {
   const { name } = await inquirer.prompt([
@@ -20,7 +19,7 @@ export default async () => {
   log("🚌 创建项目:" + name);
 
   // 从github克隆项目到指定文件夹
-  await clone("github:leedawn/smart-admin", name);
+  await clone("github:leedawn/smart-ui-app-js-template", name);
 
   // 生成路由定义
   compile(

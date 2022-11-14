@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-// console.log("create-smarty .....");
 
 import { promisify } from "util";
 import figlet from "figlet";
@@ -8,12 +7,9 @@ import chalk from "chalk";
 import inquirer from "inquirer";
 import chalkAnimation from "chalk-animation";
 
-const log = (content) => console.log(chalk.green(content));
+
 const opt = {
-  "SmartyUI应用模版(Vite)": "smart-ui-vite",
-  SmartyAdmin模版: "admin",
-  组件库脚手架: "uitemplate",
-  组件库文档网站: "uitemplate",
+  "SmartUI应用模版(Vite)": "smart-ui-vite",
   退出: "quit",
 };
 
@@ -29,7 +25,6 @@ const question = [
 // 打印欢迎画面
 clear();
 const logo = figlet.textSync("Smart UI!", {
-  // font: "Ghost",
   horizontalLayout: "default",
   verticalLayout: "default",
   width: 80,
@@ -44,7 +39,6 @@ setTimeout(() => {
 
 async function query() {
   const answer = await inquirer.prompt(question);
-
   if (answer.operation === "退出") return;
 
   const { default: op } = await import(`../lib/operations/${opt[answer.operation]}.js`);
