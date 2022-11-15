@@ -1,8 +1,9 @@
 {
   "name": "mock-ui-vite-plus",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
+  "module":"./dist/smart-ui.mjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -42,9 +43,9 @@
     "terser": "^5.15.1",
     "typescript": "^4.8.4",
     "unocss": "^0.46.3",
+    "vite": "^3.2.3",
     "vitepress": "0.22.4",
     "vitepress-theme-demoblock": "^1.4.2",
     "vitest": "^0.24.5"
   }
 }
-
