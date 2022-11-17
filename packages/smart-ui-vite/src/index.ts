@@ -4,7 +4,7 @@
 
 // createApp(SFCButton).mount("#app");
 
-import UButton from "./button/index";
+/* import UButton from "./button/index";
 import { createApp } from "vue/dist/vue.esm-bundler.js";
 
 createApp({
@@ -15,4 +15,10 @@ createApp({
     </div>`,
 })
   .component(UButton.name, UButton)
-  .mount("#app");
+  .mount("#app"); */
+
+import { createApp } from "vue";
+import Demo from "./demo/async-button.vue";
+import entry from "./entry";
+
+createApp(Demo).use(entry).mount("#app");

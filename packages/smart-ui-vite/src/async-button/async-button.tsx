@@ -14,12 +14,11 @@ export default defineComponent({
     },
   },
   inheritAttrs: false,
-  //   emits: ["click"],
-  setup(props, { attrs, emit, slots }) {
+  setup(props, { attrs, slots }) {
     const loading = ref(false);
 
     async function click(event) {
-      props.stop && event.propagation;
+      props.stop && event.stopPropagation();
       loading.value = true;
       try {
         await props.click();
