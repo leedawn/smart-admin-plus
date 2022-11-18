@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <UInput v-model:value="value" trim @blur="test" />
 </template>
