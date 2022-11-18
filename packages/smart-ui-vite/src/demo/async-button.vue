@@ -1,7 +1,5 @@
 <template>
-  <div @click="wow">
-    <AsyncButton type="primary" stop :click="test">test</AsyncButton>
-  </div>
+  <AsyncButton type="primary" stop :click="test">test</AsyncButton>
 </template>
 
 <script setup lang="ts">
@@ -11,8 +9,5 @@ const test = () => {
       resolve("success");
     }, 2000);
   });
-};
-const wow = () => {
-  console.log("wow");
 };
 </script>

@@ -18,7 +18,7 @@ createApp({
   .mount("#app"); */
 
 import { createApp } from "vue";
-import Demo from "./demo/input.vue";
+import Demo from "./demo/icon.vue";
 import entry from "./entry";
 
 createApp(Demo).use(entry).mount("#app");
