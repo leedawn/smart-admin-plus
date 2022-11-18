@@ -18,7 +18,7 @@ createApp({
   .mount("#app"); */
 
 import { createApp } from "vue";
-import Demo from "./demo/async-button.vue";
+import Demo from "./demo/input.vue";
 import entry from "./entry";
 
 createApp(Demo).use(entry).mount("#app");
