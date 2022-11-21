@@ -5,6 +5,7 @@ import TSXButton from "./tsx-button";
 import UButton from "./button";
 import AsyncButton from "./async-button";
 import UInput from "./input";
+import UIcon from "./icon";
 
 export { RenderButton, SFCButton, TSXButton };
 
@@ -16,5 +17,6 @@ export default {
     app.component(TSXButton.name, TSXButton);
     app.component(AsyncButton.name, AsyncButton);
     app.component(UInput.name, UInput);
+    app.component(UIcon.name, UIcon);
   },
 };

@@ -51,6 +51,7 @@ importers:
 
   packages/smart-ui-vite:
     specifiers:
+      '@ant-design/icons-vue': ^6.1.0
       '@iconify-json/ic': ^1.1.9
       '@typescript-eslint/eslint-plugin': ^5.42.0
       '@typescript-eslint/parser': ^5.42.0
@@ -79,6 +80,7 @@ importers:
       vitest: ^0.24.5
       vue: ^3.2.41
     dependencies:
+      '@ant-design/icons-vue': registry.npmmirror.com/@ant-design/icons-vue/6.1.0
       ant-design-vue: registry.npmmirror.com/ant-design-vue/3.2.15_vue@3.2.45
       lodash: registry.npmmirror.com/lodash/4.17.21
       vue: registry.npmmirror.com/vue/3.2.45
@@ -266,7 +268,7 @@ packages:
     dev: true
 
   registry.npmmirror.com/@ant-design/colors/6.0.0:
-    resolution: {integrity: sha512-qAZRvPzfdWHtfameEGP2Qvuf838NhergR35o+EuVyB5XvSA98xod5r4utvi4TJ3ywmevm290g9nsCG5MryrdWQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@ant-design/colors/-/colors-6.0.0.tgz}
+    resolution: {integrity: sha512-qAZRvPzfdWHtfameEGP2Qvuf838NhergR35o+EuVyB5XvSA98xod5r4utvi4TJ3ywmevm290g9nsCG5MryrdWQ==, registry: https://packages.aliyun.com/5eb501ef3fd198000181afca/npm/npm-registry/, tarball: https://registry.npmmirror.com/@ant-design/colors/-/colors-6.0.0.tgz}
     name: '@ant-design/colors'
     version: 6.0.0
     dependencies:
@@ -274,22 +276,18 @@ packages:
     dev: false
 
   registry.npmmirror.com/@ant-design/icons-svg/4.2.1:
-    resolution: {integrity: sha512-EB0iwlKDGpG93hW8f85CTJTs4SvMX7tt5ceupvhALp1IF44SeUFOMhKUOYqpsoYWQKAOuTRDMqn75rEaKDp0Xw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@ant-design/icons-svg/-/icons-svg-4.2.1.tgz}
+    resolution: {integrity: sha512-EB0iwlKDGpG93hW8f85CTJTs4SvMX7tt5ceupvhALp1IF44SeUFOMhKUOYqpsoYWQKAOuTRDMqn75rEaKDp0Xw==, registry: https://packages.aliyun.com/5eb501ef3fd198000181afca/npm/npm-registry/, tarball: https://registry.npmmirror.com/@ant-design/icons-svg/-/icons-svg-4.2.1.tgz}
     name: '@ant-design/icons-svg'
     version: 4.2.1
     dev: false
 
-  registry.npmmirror.com/@ant-design/icons-vue/6.1.0_vue@3.2.45:
-    resolution: {integrity: sha512-EX6bYm56V+ZrKN7+3MT/ubDkvJ5rK/O2t380WFRflDcVFgsvl3NLH7Wxeau6R8DbrO5jWR6DSTC3B6gYFp77AA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@ant-design/icons-vue/-/icons-vue-6.1.0.tgz}
-    id: registry.npmmirror.com/@ant-design/icons-vue/6.1.0
+  registry.npmmirror.com/@ant-design/icons-vue/6.1.0:
+    resolution: {integrity: sha512-EX6bYm56V+ZrKN7+3MT/ubDkvJ5rK/O2t380WFRflDcVFgsvl3NLH7Wxeau6R8DbrO5jWR6DSTC3B6gYFp77AA==, registry: https://packages.aliyun.com/5eb501ef3fd198000181afca/npm/npm-registry/, tarball: https://registry.npmmirror.com/@ant-design/icons-vue/-/icons-vue-6.1.0.tgz}
     name: '@ant-design/icons-vue'
     version: 6.1.0
-    peerDependencies:
-      vue: '>=3.0.3'
     dependencies:
       '@ant-design/colors': registry.npmmirror.com/@ant-design/colors/6.0.0
       '@ant-design/icons-svg': registry.npmmirror.com/@ant-design/icons-svg/4.2.1
-      vue: registry.npmmirror.com/vue/3.2.45
     dev: false
 
   registry.npmmirror.com/@antfu/install-pkg/0.1.1:
@@ -878,7 +876,7 @@ packages:
     dev: true
 
   registry.npmmirror.com/@ctrl/tinycolor/3.4.1:
-    resolution: {integrity: sha512-ej5oVy6lykXsvieQtqZxCOaLT+xD4+QNarq78cIYISHmZXshCvROLudpQN3lfL8G0NL7plMSSK+zlyvCaIJ4Iw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@ctrl/tinycolor/-/tinycolor-3.4.1.tgz}
+    resolution: {integrity: sha512-ej5oVy6lykXsvieQtqZxCOaLT+xD4+QNarq78cIYISHmZXshCvROLudpQN3lfL8G0NL7plMSSK+zlyvCaIJ4Iw==, registry: https://packages.aliyun.com/5eb501ef3fd198000181afca/npm/npm-registry/, tarball: https://registry.npmmirror.com/@ctrl/tinycolor/-/tinycolor-3.4.1.tgz}
     name: '@ctrl/tinycolor'
     version: 3.4.1
     engines: {node: '>=10'}
@@ -2205,7 +2203,7 @@ packages:
       vue: '>=3.2.0'
     dependencies:
       '@ant-design/colors': registry.npmmirror.com/@ant-design/colors/6.0.0
-      '@ant-design/icons-vue': registry.npmmirror.com/@ant-design/icons-vue/6.1.0_vue@3.2.45
+      '@ant-design/icons-vue': registry.npmmirror.com/@ant-design/icons-vue/6.1.0
       '@babel/runtime': registry.npmmirror.com/@babel/runtime/7.20.1
       '@ctrl/tinycolor': registry.npmmirror.com/@ctrl/tinycolor/3.4.1
       '@simonwep/pickr': registry.npmmirror.com/@simonwep/pickr/1.8.2
