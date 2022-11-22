@@ -6,6 +6,7 @@ import UButton from "./button";
 import AsyncButton from "./async-button";
 import UInput from "./input";
 import UIcon from "./icon";
+import UDatePicker from "./date-picker";
 
 export { RenderButton, SFCButton, TSXButton };
 
@@ -18,5 +19,6 @@ export default {
     app.component(AsyncButton.name, AsyncButton);
     app.component(UInput.name, UInput);
     app.component(UIcon.name, UIcon);
+    app.component(UDatePicker.name, UDatePicker);
   },
 };
