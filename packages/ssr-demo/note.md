@@ -202,3 +202,211 @@ pnpm install nodemon --save-dev
     "build:server": "npx webpack build --config ./webpack.server.js --watch"
   },
 ```
+
+### 模版页面的渲染
+1. 页面内容。这边是使用 React 函数式的写法来搭建模板而不是创建类的形式，在大型项目中， React 函数式的写法不需要创建实例，可以按照实际的业务情形来拆分组件的粒度，加上有 react hook 的帮助，我们已经不再需要去过多关注生命周期，相反更多是一种“组合大于继承”的思想，对大家理解函数式编程也会有大的帮助。
+```
+pnpm i react react-dom 
+pnpm i -D @types/react @types/react-dom
+```
+```
+// 创建组件
+// ./src/pages/Home/index.tsx
+const Home = () => {
+  return (
+    <div>
+      <h1>hello-ssr</h1>
+      <button
+        onClick={(): void => {
+          alert("hello-ssr");
+        }
+      >
+        alert
+      </button>
+    </div>
+  );
+};
+
+export default Home;
+```
+```
+// 将模版元素转成字符串
+// ./src/server/index.tsx
+import express from "express";
+import childProcess from "child_process";
+import { renderToString } from "react-dom/server";
+import Home from "@/pages/Home";
+
+const app = express();
+const content = renderToString(<Home />);
+
+app.get("*", (req, res) => {
+  res.send(`
+    <html
+      <body>
+        <div>${content}</div>
+      </body>
+    </html>
+  `);
+});
+
+app.listen(3000, () => {
+  console.log("ssr-server listen on 3000");
+});
+
+childProcess.exec("start http://127.0.0.1:3000");
+```
+2. 绑定事件。这个也叫“同构”，是服务器端渲染的核心概念，同一套 React 代码在服务器端渲染一遍，然后在客户端再执行一遍。服务端负责静态 dom 的拼接，而客户端负责事件的绑定，不仅是模板页面渲染，后面的路由，数据的请求都涉及到同构的概念。
+```
+import { hydrateRoot } from "react-dom/client";
+import Home from "@/pages/Home";
+
+hydrateRoot(document.getElementById("root") as Document | Element, <Home />);
+```
+```
+// webpack 打包命令
+// webpack.client.js
+const path = require("path");
+const { merge } = require("webpack-merge");
+const baseConfig = require("./webpack.base");
+
+module.exports = merge(baseConfig, {
+  mode: "development",
+  entry: "./src/client/index.tsx",
+  output: {
+    filename: "index.js",
+    path: path.resolve(process.cwd(), "client_build"),
+  },
+});
+```
+```
+// package.json
+"scripts": {
+    "build:client": "npx webpack build --config ./webpack.client.js --watch",
+},
+```
+```
+// 引入客户端打包后的文件
+// ./src/server/index.tsx
+import express from "express";
+import childProcess from "child_process";
+import { renderToString } from "react-dom/server";
+import Home from "@/pages/Home";
+import path from "path";
+
+const app = express();
+const content = renderToString(<Home />);
+
+app.use(express.static(path.resolve(process.cwd(), "client_build")));
+
+app.get("*", (req, res) => {
+  res.send(`
+    <html
+      <body>
+        <div id="root">${content}</div>
+        <script src="/index.js"></script>
+      </body>
+    </html>
+  `);
+});
+
+app.listen(3000, () => {
+  console.log("ssr-server listen on 3000");
+});
+
+childProcess.exec("start http://127.0.0.1:3000");
+```
+
+### 路由的匹配
+利用同构原理，使客户端和服务端都有路由配置。使用无状态路由 StaticRouter，客户端中历史记录会改变状态，同时使屏幕更新，而服务端不能改动
+到状态。使用 a 标签会发生服务器端的路由跳转，会有对服务端的请求；而 react 路由会发生客户端的路由跳转，不会有请求。
+
+```
+pnpm i react-router-dom 
+```
+```
+// src/pages/Demo/index.tsx
+import { FC } from "react";
+const demo: FC = () => <div>这是一个DOMO页面</div>;
+export default demo;
+```
+```
+import Home from "./pages/Home";
+import Demo from "./pages/Domo";
+
+interface IRouter {
+  path: string;
+  element: JSX.Element;
+}
+
+const router: IRouter[] = [
+  {
+    path: "/",
+    element: <Home />,
+  },
+  {
+    path: "/demo",
+    element: <Demo />,
+  },
+];
+export default router;
+```
+```
+// src/client/index.tsx
+import { hydrateRoot } from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import router from "../router";
+
+const Client = (): JSX.Element => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {router.map((item, index) => {
+          return <Route {...item} key={index}></Route>;
+        })}
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+hydrateRoot(document.getElementById("root") as Document | Element, <Client />);
+
+```
+```
+// src/server/index.tsx
+import { renderToString } from "react-dom/server";
+import router from "../router";
+import { StaticRouter } from "react-router-dom/server";
+import { Route, Routes } from "react-router-dom";
+
+...
+app.get("*", (req, res) => {
+  const content = renderToString(
+    <StaticRouter location={req.path}>
+      <Routes>
+        {router.map((item, index) => {
+          return <Route {...item} key={index}></Route>;
+        })}
+      </Routes>
+    </StaticRouter>
+  );
+ ...
+});
+```
+```
+// src/pages/Demo/index.tsx
+import { useNavigate } from "react-router-dom";
+
+const Home = () => {
+  const navigator = useNavigate();
+  return (
+    <div>
+      <button onClick={() => alert("hello ssr")}>test</button>
+      <a href="http://127.0.0.1:3000/demo">链接跳转</a>
+      <span onClick={() => navigator("/demo")}>路由跳转</span>
+    </div>
+  );
+};
+
+export default Home;
+```
