@@ -7,9 +7,22 @@ import { StaticRouter } from "react-router-dom/server";
 import { Route, Routes } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
+// const bodyParser = require("body-parser");
+// console.log("🚀 ~ file: index.tsx:11 ~ bodyParser", bodyParser);
+
 const app = express();
 
 app.use(express.static(path.resolve(process.cwd(), "client_build")));
+
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+app.post("/api/getDemoData", (req, res) => {
+  res.send({
+    data: req.body,
+    status_code: 0,
+  });
+});
 
 app.get("*", (req, res) => {
   const content = renderToString(

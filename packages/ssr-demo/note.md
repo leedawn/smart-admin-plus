@@ -410,3 +410,54 @@ const Home = () => {
 
 export default Home;
 ```
+
+### header 标签的修改
+使用到了同构，包括客户端和服务端
+```
+pnpm install react-helmet --save
+pnpm install @types/react-helmet --save-dev
+```
+```
+import { useNavigate } from "react-router-dom";
+import { Fragment } from "react";
+import { Helmet } from "react-helmet";
+
+const Home = () => {
+  const navigator = useNavigate();
+  return (
+    <Fragment>
+      <Helmet>
+        <title>服务端渲染</title>
+        <meta name="description" content="服务端渲染" />
+      </Helmet>
+      <div>
+        ...
+      </div>
+    </Fragment>
+  );
+};
+
+export default Home;
+```
+```
+import { Helmet } from "react-helmet";
+...
+
+app.get("*", (req, res) => {
+ ...
+
+  const helmet = Helmet.renderStatic();
+  res.send(`
+    <html>
+    <head>
+      ${helmet.title.toString()}
+      ${helmet.meta.toString()}
+    </head>
+     ...
+    </html>
+  `);
+});
+
+...
+
+```
