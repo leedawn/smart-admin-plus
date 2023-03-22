@@ -4,7 +4,6 @@ import { ReactComponent as ReactSvg } from '@assets/react.svg';
 import { version } from '../../../package.json';
 import Worker from './webWorkerExample.js?worker';
 
-
 export function Header() {
   const worker = new Worker();
   window.addEventListener('message', (e) => {
