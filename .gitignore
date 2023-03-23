@@ -1,6 +1,7 @@
 coverage
 .nuxt
 .next
+pnpm-lock.yaml
 
 # Logs
 logs
