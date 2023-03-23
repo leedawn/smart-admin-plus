@@ -33,7 +33,10 @@ export default defineConfig({
       '@assets': path.join(__dirname, 'src/assets')
     }
   },
-  json: {
-    // stringify: true  // 禁用按名导入 json 文件
+  // json: {
+  //   // stringify: true  // 禁用按名导入 json 文件
+  // },
+  optimizeDeps:{
+    include:['object-assign']
   }
 });

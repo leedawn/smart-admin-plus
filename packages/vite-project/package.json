@@ -11,8 +11,10 @@
     "lint": "pnpm run lint:script && pnpm run lint:style"
   },
   "dependencies": {
+    "object-assign": "^4.1.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-virtualized": "^9.22.3"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

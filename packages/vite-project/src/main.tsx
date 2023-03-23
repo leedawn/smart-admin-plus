@@ -8,3 +8,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <App />
   </React.StrictMode>
 );
+
+const importModule=(m:string)=>import(`./locales/${m}.js`)
+importModule('zh_CN')

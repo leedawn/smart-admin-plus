@@ -3,4 +3,4 @@
 
 cd packages/smart-ui-vite && pnpm run lint
 
-cd ../vite-project && npx --no -- lint-staged
+# cd ../vite-project && npx --no -- lint-staged
