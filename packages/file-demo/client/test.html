@@ -1,0 +1,74 @@
+<!-- 参考 https://developer.mozilla.org/zh-CN/docs/Web/API/File_API/Using_files_from_web_applications#%E7%A4%BA%E4%BE%8B%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%AF%B9%E8%B1%A1_url_%E6%9D%A5%E6%98%BE%E7%A4%BA%E5%9B%BE%E7%89%87 -->
+<div
+  id="dropbox"
+  style="
+    margin-bottom: 20px;
+    width: 200px;
+    height: 80px;
+    border: 2px solid #000;
+  "
+>
+  将文件拖拽到该区域
+</div>
+<input type="file" id="file" style="display: none" />
+<button id="button">选择文件</button>
+<div id="name"></div>
+<div id="preview"></div>
+
+<script>
+  const fileElement = document.querySelector("#file");
+  const button = document.querySelector("#button");
+  const name = document.querySelector("#name");
+  const dropbox = document.querySelector("#dropbox");
+  const preview = document.querySelector("#preview");
+
+  button.addEventListener("click", handleClick, false);
+  function handleClick() {
+    fileElement.click();
+  }
+
+  fileElement.addEventListener("change", handleChange, false);
+  function handleChange() {
+    if (this.files && this.files.length) {
+      const file = this.files[0];
+      name.innerText = file.name;
+      console.log("🚀 ~ file: test.html:7 ~ handleChange ~ fileList:", file);
+
+      // 1. 图片处理
+      if (!/^image\//.test(file.type)) return;
+      const img = document.createElement("img");
+      img.file = file;
+      img.style.width = "200px";
+      img.style.height = "80px";
+      preview.appendChild(img);
+
+      /* 第一种创建预览地址的方式   
+    const reader = new FileReader();
+      reader.onload = function (e) {
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file); */
+
+      // 第二种创建预览地址的方式
+      img.src = window.URL.createObjectURL(file);
+      img.onload = function () {
+        window.URL.revokeObjectURL(this.src);
+      };
+    }
+  }
+
+  // 2. 拖拽上传
+  dropbox.addEventListener("dragenter", dropCommon, false);
+  dropbox.addEventListener("dragover", dropCommon, false);
+  dropbox.addEventListener("drop", handleDrop, false);
+  function dropCommon(e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  function handleDrop(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    console.log("🚀 ~ file: test.html:40 ~ handleDrop ~ file:", file);
+  }
+</script>

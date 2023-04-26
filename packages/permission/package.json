@@ -1,0 +1,20 @@
+{
+  "name": "permission",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ts-node permission.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "utils": "workspace:^1.0.0",
+    "vue": "2.6.0",
+    "vue-router": "3.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.10"
+  }
+}
