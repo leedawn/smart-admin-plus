@@ -1,0 +1,39 @@
+<script>
+  //   var xhr = new XMLHttpRequest();
+  //   xhr.addEventListener("progress", (event) => {
+  //     console.log(
+  //       "🚀 ~ file: index.html:19 ~ xhr.addEventListener ~ event:",
+  //       event
+  //     );
+  //   });
+
+  //   xhr.open("GET", "http://localhost:3000", true);
+  //   xhr.onload = function (e) {
+  //     console.log(xhr.getResponseHeader("Last-Modified"));
+  //     if (xhr.readyState === 4) {
+  //       if (xhr.status === 200) {
+  //         console.log(xhr.responseText);
+  //       } else {
+  //         console.error(xhr.statusText);
+  //       }
+  //     }
+  //   };
+  //   xhr.onerror = function (e) {
+  //     console.error(xhr.statusText);
+  //   };
+  //   xhr.send(null);
+
+  let url = "http://localhost:3000/log";
+  let log = function () {
+    // 测试是否支持 Beacon
+    if (!navigator.sendBeacon) return true;
+    const data = {
+      start: new Date().getTime(),
+      end: performance.now(),
+      url: "base.html",
+    };
+    const res = navigator.sendBeacon(url, JSON.stringify(data));
+    console.log("🚀 ~ file: base.html:36 ~ log ~ res:", res);
+  };
+  window.addEventListener("visibilitychange", log);
+</script>
