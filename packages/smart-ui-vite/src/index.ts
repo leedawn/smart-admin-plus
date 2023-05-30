@@ -18,7 +18,7 @@ createApp({
   .mount("#app"); */
 
 import { createApp } from "vue";
-import Demo from "./demo/date-picker.vue";
+import Demo from "./demo/modal.vue";
 import entry from "./entry";
 
 createApp(Demo).use(entry).mount("#app");
