@@ -1,22 +1,21 @@
-import { defineComponent, ref } from "vue";
-import { Button, Modal } from "ant-design-vue";
+import { defineComponent } from "vue";
+import { Modal } from "ant-design-vue";
 import "ant-design-vue/es/modal/style/css";
 
 export default defineComponent({
   name: "UModal",
-  setup() {
-    let visible = ref(false);
-
+  props: ["visible"],
+  emits: ["update:visible"],
+  inheritAttrs: false,
+  setup(props, { emit, slots, attrs }) {
     return () => (
       <>
-        <Button onClick={() => (visible.value = !visible.value)} type="primary">
-          show
-        </Button>
         <Modal
-          visible={visible.value}
-          onUpdate:visible={() => (visible.value = false)}
+          {...attrs}
+          visible={props.visible}
+          onUpdate:visible={() => emit("update:visible", !props.visible)}
         >
-          some content
+          {slots.default()}
         </Modal>
       </>
     );
