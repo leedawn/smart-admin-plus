@@ -145,3 +145,38 @@ type MyParameters<T extends (...args: any[]) => any> = T extends (
   ? R
   : any;
 type FunctionParamsType = MyParameters<typeof foo>; // [arg1: string, arg2: number] */
+
+/**
+ * @description 14. ReturnType
+ */
+/* const fn = (v: boolean) => {
+  if (v) return 1;
+  else return 2;
+};
+
+type MyReturnType<T extends Function> = T extends (
+  ...args: unknown[]
+) => infer R
+  ? R
+  : never;
+
+type a = MyReturnType<typeof fn>; // should be "1 | 2" */
+
+/**
+ * @description 201 omit
+ */
+/* interface Todo {
+  title: string;
+  description: string;
+  completed: boolean;
+}
+
+type MyOmit<T extends Object, U extends keyof T> = {
+  [key in keyof T as key extends U ? never : key]: T[key];
+};
+
+type TodoPreview = MyOmit<Todo, "description" | "title">;
+
+const todo: TodoPreview = {
+  completed: false,
+}; */

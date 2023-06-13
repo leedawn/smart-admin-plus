@@ -12,14 +12,14 @@
 ```vue
 <template>
   <div style="margin-top:50px;">
-    <AsyncButton type="primary" :click="test">异步{{str}}</AsyncButton>
+    <AsyncButton type="primary" :click="test">异步{{ str }}</AsyncButton>
   </div>
 </template>
 
 <script lang="ts" setup>
-console.log('script')
-import {ref} from 'vue'
-const str=ref('er')
+console.log("script");
+import { ref } from "vue";
+const str = ref("er");
 const test = function () {
   return new Promise((resolve) => {
     setTimeout(() => {

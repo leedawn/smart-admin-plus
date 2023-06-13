@@ -2,7 +2,11 @@
   "compilerOptions": {
     "declaration": true,
     "declarationDir": "./dist/types",
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@": ["./src"]
+    }
   },
   "include": ["./**/*.*", "./shims-vue.d.ts"],
   "exclude": ["node_modules"],
