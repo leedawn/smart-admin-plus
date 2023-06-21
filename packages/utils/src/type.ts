@@ -147,7 +147,7 @@ type MyParameters<T extends (...args: any[]) => any> = T extends (
 type FunctionParamsType = MyParameters<typeof foo>; // [arg1: string, arg2: number] */
 
 /**
- * @description 14. ReturnType
+ * @description 201. ReturnType
  */
 /* const fn = (v: boolean) => {
   if (v) return 1;
@@ -163,7 +163,7 @@ type MyReturnType<T extends Function> = T extends (
 type a = MyReturnType<typeof fn>; // should be "1 | 2" */
 
 /**
- * @description 201 omit
+ * @description 202 omit
  */
 /* interface Todo {
   title: string;
@@ -180,3 +180,50 @@ type TodoPreview = MyOmit<Todo, "description" | "title">;
 const todo: TodoPreview = {
   completed: false,
 }; */
+
+/**
+ * @description 202 readonly2
+ */
+/* 
+interface Todo {
+  title: string;
+  description: string;
+  completed: boolean;
+}
+
+type MyReadonly2<T, K extends keyof T> = Readonly<Pick<T, K>> & Omit<T, K>;
+
+const todo: MyReadonly2<Todo, "title" | "description"> = {
+  title: "Hey",
+  description: "foobar",
+  completed: false,
+};
+
+todo.title = "Hello"; // Error: cannot reassign a readonly property
+todo.description = "barFoo"; // Error: cannot reassign a readonly property
+todo.completed = true; // OK */
+
+/**
+ * @descript 203 deepReadonly
+ */
+type X = {
+  x: {
+    a: 1;
+    b: "hi";
+  };
+  y: "hey";
+};
+
+type Expected = {
+  readonly x: {
+    readonly a: 1;
+    readonly b: "hi";
+  };
+  readonly y: "hey";
+};
+
+type DeepReadonly<T> = T extends never
+  ? T
+  : { readonly [key in keyof T]: T[key] };
+
+type Todo = DeepReadonly<X>; // should be same as `Expected`

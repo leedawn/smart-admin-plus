@@ -4,7 +4,7 @@ import Modal from "./demo/modal.vue";
 import DatePicker from "./demo/date-picker.vue";
 import Icon from "./demo/icon.vue";
 import Input from "./demo/input.vue";
-import Button from "./demo/button.vue";
+import UButton from "./demo/button.vue";
 </script>
 
 <template>
@@ -14,7 +14,7 @@ import Button from "./demo/button.vue";
     <Icon />
     <Input />
     <Modal />
-    <Button />
+    <UButton />
   </div>
 </template>
 

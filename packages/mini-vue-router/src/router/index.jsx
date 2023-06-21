@@ -1,4 +1,8 @@
-import { createRouter, createWebHashHistory, createWebHistory } from "../vue-router";
+import {
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+} from "../vue-router";
 // @ts-ignore
 import Home from "../views/Home.vue";
 // @ts-ignore
@@ -36,6 +40,7 @@ const router = createRouter({
 // @ts-ignore
 router.beforeEach((to, from, next) => {
   console.log("beforeEach");
+  return 1;
 });
 
 // @ts-ignore
