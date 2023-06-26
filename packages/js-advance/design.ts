@@ -3,55 +3,29 @@
 // 创建模式：用于对象创建，封装对象创建的过程，对外只暴露必要的 API
 
 // 1. 工厂方法。通过工厂方法代替直接通过调用构造函数来创建对象。
+abstract class Product {
+  abstract say(): void;
+}
+
+class ConcreteProduct extends Product {
+  say(): void {
+    console.log("hehe");
+  }
+}
 
 abstract class Creator {
-  public abstract factoryMethod(): Product;
-
-  public someOperation(): string {
+  abstract factoryMethod(): Product;
+  someOperation() {
     const product = this.factoryMethod();
-    return `Creator: The same creator's code has just worked with ${product.operation()}`;
+    product.say();
   }
 }
-
-class ConcreteCreator1 extends Creator {
-  public factoryMethod(): Product {
-    return new ConcreteProduct1();
+class ConcreteCreator extends Creator {
+  factoryMethod(): Product {
+    return new ConcreteProduct();
   }
 }
-
-class ConcreteCreator2 extends Creator {
-  public factoryMethod(): Product {
-    return new ConcreteProduct2();
-  }
-}
-
-interface Product {
-  operation(): string;
-}
-
-class ConcreteProduct1 implements Product {
-  public operation(): string {
-    return "{Result of the ConcreteProduct1}";
-  }
-}
-
-class ConcreteProduct2 implements Product {
-  public operation(): string {
-    return "{Result of the ConcreteProduct2}";
-  }
-}
-
-function clientCode(creator: Creator) {
-  console.log("Client: I'm not aware of the creator's class, but it still works.");
-  console.log(creator.someOperation());
-}
-
-console.log("App: Launched with the ConcreteCreator1.");
-clientCode(new ConcreteCreator1());
-console.log("");
-
-console.log("App: Launched with the ConcreteCreator2.");
-clientCode(new ConcreteCreator2());
+new ConcreteCreator().someOperation();
 
 // 2. 原型
 /* var vehiclePrototype = {
@@ -152,19 +126,14 @@ console.log(builder.buildPart(1).getResult());
 console.log(builder.buildPart(3).getResult()); */
 
 // 5. 单例模式。一个 class 只有一个实例提供给全局访问
-/* class Singleton {
+class Singleton {
   private static instance: Singleton;
   public static getInstance(): Singleton {
-    if (!Singleton.instance) {
-      Singleton.instance = new Singleton();
-    }
-
+    if (!Singleton.instance) Singleton.instance = new Singleton();
     return Singleton.instance;
   }
 }
-var s1 = Singleton.getInstance();
-var s2 = Singleton.getInstance();
-console.log(s1 === s2); */
+console.log(Singleton.getInstance() === Singleton.getInstance());
 
 // 结构型模式：用于组合类和对象
 // 1. 适配器
@@ -429,15 +398,15 @@ invoker.onStep1();
 invoker.onStep2(); */
 
 // 3. 解释器
-class Expression {
+/* class Expression {
   interpret(props: string) {
     return props.length;
   }
 }
-console.log(new Expression().interpret("2222"));
+console.log(new Expression().interpret("2222")); */
 
 // 4. 迭代器
-interface IteratorInterface<T> {
+/* interface IteratorInterface<T> {
   first(): T;
   next(): T;
   isDone: boolean;
@@ -479,7 +448,7 @@ aggregator.addItem("first").addItem("second").addItem("third");
 const iterator = aggregator.createIterator();
 while (!iterator.isDone) {
   console.log(iterator.next());
-}
+} */
 
 // 5. 中介
 /* interface Mediator {
@@ -606,7 +575,7 @@ console.log(o2.observerState); */
 //  每个状态新建一个类，将状态对应的行为保存到对应的类中。
 //  上下文不会自行实现状态行为，而是会保存指向状态对象的引用。
 //  所有状态类遵循同一个接口，上下文仅通过接口和对象交互。
-class Context {
+/* class Context {
   private state: State;
 
   constructor(state: State) {
@@ -666,7 +635,7 @@ class ConcreteStateB extends State {
 
 const context = new Context(new ConcreteStateA());
 context.request1();
-context.request2();
+context.request2(); */
 
 // 10. 模板方法
 /* abstract class AbstractClass {
