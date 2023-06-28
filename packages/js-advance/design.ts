@@ -3,7 +3,7 @@
 // 创建模式：用于对象创建，封装对象创建的过程，对外只暴露必要的 API
 
 // 1. 工厂方法。通过工厂方法代替直接通过调用构造函数来创建对象。
-abstract class Product {
+/* abstract class Product {
   abstract say(): void;
 }
 
@@ -25,115 +25,142 @@ class ConcreteCreator extends Creator {
     return new ConcreteProduct();
   }
 }
-new ConcreteCreator().someOperation();
+new ConcreteCreator().someOperation(); */
 
 // 2. 原型
-/* var vehiclePrototype = {
-  name: "aaaaa",
-  getName: function () {
-    console.log("name是：" + this.name);
-  },
-};
+//   2.1 复制对象，同时使新对象不依赖原对象所属的类。
+//   2.2 克隆过程委托给被克隆对象，该对象有一个克隆方法。
 
-var vehicle = Object.create(vehiclePrototype, {
-  name: {
-    value: "bbbbb", // 对应属性名称的属性描述符
-  },
-});
-vehicle.getName();
-vehiclePrototype.getName(); */
-
-// 3. 抽象工厂
-//生成用于实例化的class
-/* interface AbstractProductA {
-  usefulFunctionA(): string;
+/* class Prototype {
+  public primitive: unknown;
+  public component: Object;
+  public circularComponent: ComponentWithBackReference;
+  clone(): this {
+    const clone = Object.create(this);
+    clone.component = Object.create(this.component);
+    clone.circularComponent = {
+      ...this.circularComponent,
+      prototype: { ...this },
+    };
+    return clone;
+  }
 }
 
-class ConcreteProductA1 implements AbstractProductA {
-  public usefulFunctionA(): string {
-    return "The result of the product A1.";
+class ComponentWithBackReference {
+  public prototype;
+  constructor(prototype: Prototype) {
+    this.prototype = prototype;
   }
 }
-class ConcreteProductA2 implements AbstractProductA {
-  public usefulFunctionA(): string {
-    return "The result of the product A2.";
-  }
+
+function clientCode() {
+  const p = new Prototype();
+  p.primitive = 2;
+  p.component = new Date();
+  p.circularComponent = new ComponentWithBackReference(p);
+  const p2 = p.clone();
+  console.log(p.primitive === p2.primitive);
+  console.log(p.component !== p2.component);
+  console.log(p.circularComponent !== p2.circularComponent);
+  console.log(p.circularComponent.prototype !== p2.circularComponent.prototype);
 }
-interface AbstractProductB {
-  usefulFunctionB(): string;
-}
-class ConcreteProductB1 implements AbstractProductB {
-  public usefulFunctionB(): string {
-    return "The result of the product B1.";
-  }
-}
-class ConcreteProductB2 implements AbstractProductB {
-  public usefulFunctionB(): string {
-    return "The result of the product B2.";
-  }
-}
-//生成工厂的工厂
+clientCode(); */
+
+// 3. 抽象工厂。创建一系列对象，无需指定具体类。
 interface AbstractFactory {
   createProductA(): AbstractProductA;
   createProductB(): AbstractProductB;
 }
-//生成的工厂1，分别实例化产品系列1
-class ConcreteFactory1 implements AbstractFactory {
-  public createProductA(): AbstractProductA {
-    return new ConcreteProductA1();
-  }
 
+class ConcreteFactory implements AbstractFactory {
+  public createProductA(): AbstractProductA {
+    return new ConcreteProductA();
+  }
   public createProductB(): AbstractProductB {
-    return new ConcreteProductB1();
+    return new ConcreteProductB();
   }
 }
-//生成的工厂2，分别实例化产品系列2
-class ConcreteFactory2 implements AbstractFactory {
-  public createProductA(): AbstractProductA {
-    return new ConcreteProductA2();
-  }
 
-  public createProductB(): AbstractProductB {
-    return new ConcreteProductB2();
+interface AbstractProductA {
+  usefulFunction(): void;
+}
+
+class ConcreteProductA implements AbstractProductA {
+  public usefulFunction() {
+    console.log("this is from productA");
   }
 }
-//此时可以分别对两工厂进行实例化后调用工厂函数进行使用，比如
-console.log(new ConcreteFactory1().createProductA().usefulFunctionA()); */
 
-// 4. 建造者。将对象的初始化和后续步骤分开。
+interface AbstractProductB {
+  usefulFunction(): void;
+  anotherUsefulFunction(collaborate: AbstractProductA): void;
+}
+
+class ConcreteProductB implements AbstractProductB {
+  public usefulFunction() {
+    console.log("this is from productB");
+  }
+  public anotherUsefulFunction(collaborate: AbstractProductA) {
+    collaborate.usefulFunction();
+    this.usefulFunction();
+  }
+}
+
+function clientCode(factory: AbstractFactory) {
+  const productA = factory.createProductA();
+  productA.usefulFunction();
+  const productB = factory.createProductB();
+  productB.anotherUsefulFunction(productA);
+}
+
+clientCode(new ConcreteFactory());
+
+// 4. 建造者。分步骤创建复杂对象，存储查看和创建修改分离
 /* interface Builder {
-  buildPart: (brick: number) => void;
+  producePartA(): void;
 }
+
 class ConcreteBuilder implements Builder {
-  constructor(public product: Director) {}
-  buildPart(brick: number) {
-    this.product.partArr.push(brick);
-    return this;
+  private product: Product;
+  constructor() {
+    this.reset();
   }
-  getResult() {
-    return this.product.partArr;
+  public reset() {
+    this.product = new Product();
   }
-}
-class Director {
-  partArr: number[] = [];
-  reset() {
-    this.partArr = [];
+  public producePartA(): void {
+    this.product.parts.push("partA");
+  }
+  public getProducts() {
+    const res = this.product;
+    this.reset();
+    return res;
   }
 }
 
-let builder = new ConcreteBuilder(new Director());
-console.log(builder.buildPart(1).getResult());
-console.log(builder.buildPart(3).getResult()); */
+class Product {
+  public parts: string[] = [];
+  public listParts() {
+    console.log(`all products: ${this.parts.join(",")}`);
+  }
+}
+
+function clientCode() {
+  const builder = new ConcreteBuilder();
+  builder.producePartA();
+  builder.getProducts().listParts();
+}
+clientCode(); */
 
 // 5. 单例模式。一个 class 只有一个实例提供给全局访问
-class Singleton {
+/* class Singleton {
   private static instance: Singleton;
   public static getInstance(): Singleton {
     if (!Singleton.instance) Singleton.instance = new Singleton();
     return Singleton.instance;
   }
 }
-console.log(Singleton.getInstance() === Singleton.getInstance());
+console.log(Singleton.getInstance() === Singleton.getInstance()); */
 
 // 结构型模式：用于组合类和对象
 // 1. 适配器
