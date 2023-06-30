@@ -1,9 +1,12 @@
-// 概述：设计模式和设计原则都是针对面向对象编程来说的。设计模式是针对一系列重复问题的解决方案。分成创建，结构，行为三种。
+// 概述：设计模式和设计原则都是针对面向对象编程来说的。设计模式是针对一系列重复问题的解决方案。分成创建，结构，行为三类。
 
-// 创建模式：用于对象创建，封装对象创建的过程，对外只暴露必要的 API
+// 创建模式：用于对象创建，封装对象创建的过程，对外只暴露必要的 API。
+// 区别：工厂方法模式关注创建特定类型的对象，抽象工厂模式关注创建一系列相关对象，单例模式限制对象的实例化，原型模式关注通过
+//     克隆创建对象，建造者模式关注构建复杂对象
 
-// 1. 工厂方法。通过工厂方法代替直接通过调用构造函数来创建对象。
-/* abstract class Product {
+// 1. 工厂方法模式。通过工厂方法代替直接通过调用构造函数来创建对象。
+/*
+abstract class Product {
   abstract say(): void;
 }
 
@@ -31,7 +34,8 @@ new ConcreteCreator().someOperation(); */
 //   2.1 复制对象，同时使新对象不依赖原对象所属的类。
 //   2.2 克隆过程委托给被克隆对象，该对象有一个克隆方法。
 
-/* class Prototype {
+/* 
+class Prototype {
   public primitive: unknown;
   public component: Object;
   public circularComponent: ComponentWithBackReference;
@@ -67,7 +71,7 @@ function clientCode() {
 clientCode(); */
 
 // 3. 抽象工厂。创建一系列对象，无需指定具体类。
-interface AbstractFactory {
+/* interface AbstractFactory {
   createProductA(): AbstractProductA;
   createProductB(): AbstractProductB;
 }
@@ -113,10 +117,11 @@ function clientCode(factory: AbstractFactory) {
   productB.anotherUsefulFunction(productA);
 }
 
-clientCode(new ConcreteFactory());
+clientCode(new ConcreteFactory()); */
 
 // 4. 建造者。分步骤创建复杂对象，存储查看和创建修改分离
-/* interface Builder {
+/* 
+interface Builder {
   producePartA(): void;
 }
 
@@ -153,7 +158,8 @@ function clientCode() {
 clientCode(); */
 
 // 5. 单例模式。一个 class 只有一个实例提供给全局访问
-/* class Singleton {
+/* 
+class Singleton {
   private static instance: Singleton;
   public static getInstance(): Singleton {
     if (!Singleton.instance) Singleton.instance = new Singleton();
@@ -163,91 +169,154 @@ clientCode(); */
 console.log(Singleton.getInstance() === Singleton.getInstance()); */
 
 // 结构型模式：用于组合类和对象
-// 1. 适配器
-/* interface Target {
-  request: () => void;
+// 1. 适配器。使不兼容的对象相互合作。
+/* class Adaptee {
+  public specialRequest(): string {
+    return "tseuqer laiceps";
+  }
 }
 
-class Client {
-  doSomeThing(instance: Target) {
-    instance.request();
+class Target {
+  public request(): string {
+    return "request";
   }
 }
-class Adaptee {
-  specialRequest() {
-    console.log("special request");
-  }
-}
-class Adapter implements Target {
-  request() {
-    new Adaptee().specialRequest();
-  }
-}
-new Client().doSomeThing(new Adapter()); */
 
-// 2. 桥接
-/* interface Implementor {
-  operationImplementation(): string;
-}
-class ConcretorImplementor implements Implementor {
-  operationImplementation() {
-    return "Concretor";
+class Adapter extends Target {
+  private adaptee: Adaptee;
+  constructor(adaptee: Adaptee) {
+    super();
+    this.adaptee = adaptee;
+  }
+  public request(): string {
+    return this.adaptee.specialRequest().split("").reverse().join("");
   }
 }
-class Abstraction {
-  protected implementation: Implementor;
 
-  constructor(implementation: Implementor) {
+function clientCode(target: Target) {
+  console.log(target.request());
+}
+const target = new Target();
+clientCode(target);
+
+const adaptee = new Adaptee();
+const adapter = new Adapter(adaptee);
+clientCode(adapter); */
+
+// 2. 桥接。将一个大类或者是一系列相关的类进行拆分，分成抽象和实现两个层次，分别进行开发使用。
+/* class Abstraction {
+  public implementation: Implementation;
+  constructor(implementation: Implementation) {
     this.implementation = implementation;
   }
   public operation(): string {
-    const result = this.implementation.operationImplementation();
-    return "default" + result;
+    return "Abstraction: " + this.implementation.operationImplementation();
   }
 }
-class RefineAbsstraction extends Abstraction {
-  operation() {
-    const result = this.implementation.operationImplementation();
-    return "refined" + result;
-  }
-}
-console.log(new RefineAbsstraction(new ConcretorImplementor()).operation()); */
 
-// 3. 组合
-/* class Component {
-  protected Children: Component[] = [];
-  constructor(public id) {}
-  add(v: Component) {
-    this.Children.push(v);
-    return this;
-  }
-  remove(v: Component) {
-    this.Children.splice(
-      this.Children.findIndex((item: Component) => item.id === v.id),
-      1
+class ExtendedAbstraction extends Abstraction {
+  public operation(): string {
+    return (
+      "ExtendedAbstraction: " + this.implementation.operationImplementation()
     );
   }
-  getChildren() {
-    return this.Children;
-  }
-  operation() {
-    console.log("我是根节点" + this.id);
-    this.Children.forEach((item: Component) => item.operation());
+}
+
+interface Implementation {
+  operationImplementation(): string;
+}
+
+class ConcreteImplementation implements Implementation {
+  public operationImplementation(): string {
+    return "operationImplementation";
   }
 }
-class Composite extends Component {
-  operation() {
-    console.log("我一般节点" + this.id);
-    this.Children.forEach((item: Component) => item.operation());
-  }
+
+function clientCode(abstraction: Abstraction) {
+  console.log(abstraction.operation());
 }
+
+const implementation = new ConcreteImplementation();
+
+const abstraction = new Abstraction(implementation);
+clientCode(abstraction);
+const extendedAbstraction = new ExtendedAbstraction(implementation);
+clientCode(extendedAbstraction); */
+
+// 3. 组合。将一组对象保存为树形结构，包含简单叶节点和复杂容器。
+/* abstract class Component {
+  private parent: null | Component;
+
+  public setParent(component: Component | null) {
+    this.parent = component;
+  }
+
+  public getParent(): Component | null {
+    return this.parent;
+  }
+
+  public add(component: Component): void {}
+
+  public remove(component: Component): void {}
+
+  public isComposite(): boolean {
+    return false;
+  }
+
+  public abstract operation(): string;
+}
+
 class Leaf extends Component {
-  operation() {
-    console.log("我叶节点" + this.id);
+  public operation(): string {
+    return "Leaf";
   }
 }
-const root = new Component(1).add(new Composite(2).add(new Leaf(4))).add(new Leaf(3));
-root.operation(); */
+
+class Composite extends Component {
+  private children: Component[] = [];
+
+  public add(component: Component): void {
+    this.children.push(component);
+    this.setParent(this);
+  }
+
+  public remove(component: Component): void {
+    const target = this.children.indexOf(component);
+    this.children.splice(target, 1);
+    this.setParent(null);
+  }
+
+  public isComposite(): boolean {
+    return true;
+  }
+
+  public operation(): string {
+    let res = [];
+    for (const component of this.children) {
+      res.push(component.operation());
+    }
+    return `Branch(${res.join("+")})`;
+  }
+}
+
+function clientCode(component: Component) {
+  console.log(component.operation()); // Branch(Branch(Leaf+Leaf)+Branch()+Leaf)
+}
+
+const leaf = new Leaf();
+const tree = new Composite();
+const branch1 = new Composite();
+branch1.add(leaf);
+branch1.add(leaf);
+const branch2 = new Composite();
+branch2.add(leaf);
+tree.add(branch1);
+tree.add(branch2);
+tree.add(leaf);
+if (branch2.isComposite()) {
+  branch2.remove(leaf);
+}
+clientCode(tree); */
 
 //  4. 装饰器
 /* interface Component {
@@ -271,6 +340,38 @@ class ConcreteDecoretor extends Decorator {
   }
 }
 console.log(new ConcreteDecoretor(new ConcreteComponent()).operation()); */
+
+interface Component {
+  operation(): string;
+}
+
+class ConcreteComponent implements Component {
+  public operation(): string {
+    return "ConcreteComponent";
+  }
+}
+
+class Decorator implements Component {
+  protected component: Component;
+
+  constructor(component: Component) {
+    this.component = component;
+  }
+
+  public operation(): string {
+    return this.component.operation();
+  }
+}
+
+class ConcreteDecoratorA extends Decorator {
+  public operation(): string {
+    return `ConcreteDecoratorA(${super.operation()})`;
+  }
+}
+
+const simple = new ConcreteComponent();
+const decorator1 = new ConcreteDecoratorA(simple);
+console.log(decorator1.operation());
 
 //  5. 外观
 /* class Facade {
