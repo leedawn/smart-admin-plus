@@ -422,23 +422,43 @@ const flyweight2 = factory.getFlyweight(["BMW", "yellow"]);
 flyweight2.operation(["leon"]);
 factory.listFlyweights(); */
 
-// 7. 代理
-/* interface Subject {
-  request(): string;
+// 7. 代理。代理是对象的替代品，控制着原对象的访问，可以在请求提交到原对象前后进行一些处理。
+interface Subject {
+  request(): void;
 }
-class RealObject implements Subject {
-  request() {
-    return "real";
+
+class RealSubject implements Subject {
+  public request(): void {
+    console.log("realSubject");
   }
 }
-//因为在ts中已经存在Proxy关键字，这里以ProxySubject 替代
+
 class ProxySubject implements Subject {
-  constructor(private realObject) {}
-  request() {
-    return "proxy-" + this.realObject.request();
+  private realSubject: RealSubject;
+
+  constructor(realSubject: RealSubject) {
+    this.realSubject = realSubject;
+  }
+
+  public request(): void {
+    if (this.checkAccess()) {
+      this.realSubject.request();
+      this.logAccess();
+    }
+  }
+
+  private checkAccess() {
+    return true;
+  }
+
+  private logAccess() {
+    console.log("logAccess");
   }
 }
-console.log(new ProxySubject(new RealObject()).request()); */
+
+const realSubject = new RealSubject();
+const proxySubject = new ProxySubject(realSubject);
+proxySubject.request();
 
 // 行为模式：包含算法和对象间的职责分配
 

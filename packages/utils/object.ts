@@ -16,7 +16,7 @@
 // p.print();
 
 // 2. new 仿写
-function objectFactory(constructor, ...args) {
+/* function objectFactory(constructor, ...args) {
   let newObject = null;
   newObject = Object.create(constructor.prototype);
   const result = constructor.apply(newObject, args);
@@ -35,3 +35,4 @@ Fn.prototype.print = function () {
 const obj = objectFactory(Fn, 23);
 obj.name = "leon";
 obj.print();
+ */
