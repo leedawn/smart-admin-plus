@@ -11,6 +11,7 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "allowSyntheticDefaultImports": true,
     "target": "ES5",
     "lib": ["DOM", "ESNext"]
   },

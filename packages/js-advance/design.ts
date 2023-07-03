@@ -341,7 +341,7 @@ class ConcreteDecoretor extends Decorator {
 }
 console.log(new ConcreteDecoretor(new ConcreteComponent()).operation()); */
 
-interface Component {
+/* interface Component {
   operation(): string;
 }
 
@@ -372,7 +372,7 @@ class ConcreteDecoratorA extends Decorator {
 const simple = new ConcreteComponent();
 const decorator1 = new ConcreteDecoratorA(simple);
 console.log(decorator1.operation());
-
+ */
 //  5. 外观
 /* class Facade {
   constructor(private member1: SubSystem1, private member2: SubSystem2) {}
@@ -427,23 +427,43 @@ console.log(flyWeightPool.getFlyweight({ a: 1 }, true) === flyWeightPool.getFlyw
 console.log(flyWeightPool.getFlyweight({ a: 3 }, true) === flyWeightPool.getFlyweight({ a: 3 })); //false
 console.log(flyWeightPool.getFlyweight({ a: 4 }) === flyWeightPool.getFlyweight({ a: 4 }, true)); //true */
 
-// 7. 代理
-/* interface Subject {
-  request(): string;
+// 7. 代理。代理是对象的替代品，控制着原对象的访问，可以在请求提交到原对象前后进行一些处理。
+interface Subject {
+  request(): void;
 }
-class RealObject implements Subject {
-  request() {
-    return "real";
+
+class RealSubject implements Subject {
+  public request(): void {
+    console.log("realSubject");
   }
 }
-//因为在ts中已经存在Proxy关键字，这里以ProxySubject 替代
+
 class ProxySubject implements Subject {
-  constructor(private realObject) {}
-  request() {
-    return "proxy-" + this.realObject.request();
+  private realSubject: RealSubject;
+
+  constructor(realSubject: RealSubject) {
+    this.realSubject = realSubject;
+  }
+
+  public request(): void {
+    if (this.checkAccess()) {
+      this.realSubject.request();
+      this.logAccess();
+    }
+  }
+
+  private checkAccess() {
+    return true;
+  }
+
+  private logAccess() {
+    console.log("logAccess");
   }
 }
-console.log(new ProxySubject(new RealObject()).request()); */
+
+const realSubject = new RealSubject();
+const proxySubject = new ProxySubject(realSubject);
+proxySubject.request();
 
 // 行为模式：包含算法和对象间的职责分配
 
