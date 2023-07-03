@@ -318,114 +318,109 @@ if (branch2.isComposite()) {
 }
 clientCode(tree); */
 
-//  4. 装饰器
+//  4. 装饰器。把对象放入到已封装的对象里面从而给原对象增加行为。
 /* interface Component {
   operation(): string;
 }
 
 class ConcreteComponent implements Component {
-  operation() {
-    return "ConcreteComponent";
-  }
-}
-class Decorator implements Component {
-  constructor(protected component: Component) {}
-  operation() {
-    return this.component.operation();
-  }
-}
-class ConcreteDecoretor extends Decorator {
-  operation() {
-    return "concrete-" + super.operation();
-  }
-}
-console.log(new ConcreteDecoretor(new ConcreteComponent()).operation()); */
-
-interface Component {
-  operation(): string;
-}
-
-class ConcreteComponent implements Component {
   public operation(): string {
     return "ConcreteComponent";
   }
 }
 
 class Decorator implements Component {
-  protected component: Component;
-
+  private component: Component;
   constructor(component: Component) {
     this.component = component;
   }
-
   public operation(): string {
     return this.component.operation();
   }
 }
 
-class ConcreteDecoratorA extends Decorator {
+class ConcreteDecorator extends Decorator {
   public operation(): string {
-    return `ConcreteDecoratorA(${super.operation()})`;
+    return `ConcreteDecorator(${super.operation()})`;
   }
 }
 
-const simple = new ConcreteComponent();
-const decorator1 = new ConcreteDecoratorA(simple);
-console.log(decorator1.operation());
+const concreteComponent = new ConcreteComponent();
+const concreteDecorator = new ConcreteDecorator(concreteComponent);
+console.log(concreteDecorator.operation()); */
 
-//  5. 外观
+//  5. 外观。为复杂的系统提供一个简单的接口。
 /* class Facade {
-  constructor(private member1: SubSystem1, private member2: SubSystem2) {}
-  operation() {
-    this.member1.operator1();
-    this.member2.operator2();
+  private system1: Subsystem1;
+  private system2: Subsystem2;
+  constructor(system1: Subsystem1, system2: Subsystem2) {
+    this.system1 = system1;
+    this.system2 = system2;
   }
-}
-class SubSystem1 {
-  operator1() {
-    console.log("子系统1工作");
-  }
-}
-class SubSystem2 {
-  operator2() {
-    console.log("子系统2工作");
+  public operation(): string {
+    return `result: ${this.system1.operation()},${this.system2.operation()}`;
   }
 }
 
-new Facade(new SubSystem1(), new SubSystem2()).operation(); */
+class Subsystem1 {
+  public operation(): string {
+    return "system1 ready!";
+  }
+}
+class Subsystem2 {
+  public operation(): string {
+    return "system2 ready!";
+  }
+}
+const s1 = new Subsystem1();
+const s2 = new Subsystem2();
+const facade = new Facade(s1, s2);
+console.log(facade.operation()); */
 
-// 6. 享元
+// 6. 享元。将不同对象的相同数据进行缓存来减少内存。
 /* class Flyweight {
-  constructor(private shareState) {}
+  private sharedState: string[];
+  constructor(state: string[]) {
+    this.sharedState = state;
+  }
   operation(uniqueState) {
-    console.log(`共享数据：${this.shareState};非共享数据：${uniqueState}`);
+    console.log(`uniqueState: ${uniqueState.join(",")},sharedState: ${this.sharedState.join(",")}`);
   }
 }
+
 class FlyweightFactory {
-  private flyweights: { [key: string]: Flyweight } = <any>{}; //共享池
-  add(shareState) {
-    this.flyweights[JSON.stringify(shareState)] = new Flyweight(shareState); //注意这里由于JSON.stringify造成的对参数的限制
-    return this;
-  }
-  //参数getExistOnly为true只获得当前pool中已经存在的，否则返回为undefined,用于验证缓存是否被启用
-  getFlyweight(shareState, getExistOnly: boolean = false) {
-    const targetFlyWeight = this.flyweights[JSON.stringify(shareState)];
-    if (targetFlyWeight || getExistOnly) {
-      return targetFlyWeight;
+  private flyweights: Record<string, Flyweight> = {};
+  constructor(states: string[][]) {
+    for (const state of states) {
+      this.flyweights[this.getKey(state)] = new Flyweight(state);
     }
-    const newFlyWeight = new Flyweight(shareState);
-    this.flyweights[JSON.stringify(shareState)] = newFlyWeight;
-    return newFlyWeight;
+  }
+
+  private getKey(keys: string[]): string {
+    return keys.join("_");
+  }
+
+  public getFlyweight(state: string[]): Flyweight {
+    const key = this.getKey(state);
+    if (!this.flyweights[key]) this.flyweights[key] = new Flyweight(state);
+    return this.flyweights[key];
+  }
+
+  public listFlyweights() {
+    console.log(`there are ${Object.keys(this.flyweights).length} flyweights`);
   }
 }
-const flyWeightPool = new FlyweightFactory();
-flyWeightPool.add({ a: 1 }).add({ b: 2 });
-//注意以下验证严格等于时需要将带daigetExistOnly参数的放在左边，
-//根据 https://tc39.es/ecma262/#sec-equality-operators-runtime-semantics-evaluation
-//进行比较时会先计算左边，否则即使原本池子里不存在，也会新创建一个，导致左右始终相等，如第三个log
-console.log(flyWeightPool.getFlyweight({ a: 1 }, true) === flyWeightPool.getFlyweight({ a: 1 })); //true
-console.log(flyWeightPool.getFlyweight({ a: 3 }, true) === flyWeightPool.getFlyweight({ a: 3 })); //false
-console.log(flyWeightPool.getFlyweight({ a: 4 }) === flyWeightPool.getFlyweight({ a: 4 }, true)); //true */
+
+const factory = new FlyweightFactory([
+  ["Benz", "red"],
+  ["BMW", "red"],
+]);
+factory.listFlyweights();
+const flyweight1 = factory.getFlyweight(["BMW", "red"]);
+flyweight1.operation(["leon"]);
+const flyweight2 = factory.getFlyweight(["BMW", "yellow"]);
+flyweight2.operation(["leon"]);
+factory.listFlyweights(); */
 
 // 7. 代理
 /* interface Subject {
