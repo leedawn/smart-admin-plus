@@ -423,7 +423,7 @@ flyweight2.operation(["leon"]);
 factory.listFlyweights(); */
 
 // 7. 代理。代理是对象的替代品，控制着原对象的访问，可以在请求提交到原对象前后进行一些处理。
-interface Subject {
+/* interface Subject {
   request(): void;
 }
 
@@ -458,48 +458,114 @@ class ProxySubject implements Subject {
 
 const realSubject = new RealSubject();
 const proxySubject = new ProxySubject(realSubject);
-proxySubject.request();
+proxySubject.request(); */
 
 // 行为模式：包含算法和对象间的职责分配
 
 // 1. 职责链
-/* class Handler {
+
+/* interface Handler {
+  setNext(handler: Handler): Handler;
+
+  handle(request: string): string;
+}
+
+abstract class AbstractHandler implements Handler {
   private nextHandler: Handler;
-  setNext(h: Handler) {
-    this.nextHandler = h;
-    return h;
+
+  public setNext(handler: Handler): Handler {
+    this.nextHandler = handler;
+    return handler;
   }
-  //默认处理，如果有下一个则交给下一个处理，否则返回'remnant'，可以通过是不是null来判断是不是最后也没处理
-  handle(request: number) {
+
+  public handle(request: string): string {
     if (this.nextHandler) {
       return this.nextHandler.handle(request);
     }
-    return "remnant";
+
+    return null;
   }
 }
 
-class ConcreteHandler1 extends Handler {
-  handle(request: number) {
-    if (request === 1) {
-      return "done by handle1";
+class MonkeyHandler extends AbstractHandler {
+  public handle(request: string): string {
+    if (request === "Banana") {
+      return `Monkey: I'll eat the ${request}.`;
     }
     return super.handle(request);
   }
 }
-class ConcreteHandler2 extends Handler {
-  handle(request: number) {
-    if (request === 2) {
-      return "done by handle2";
+
+class SquirrelHandler extends AbstractHandler {
+  public handle(request: string): string {
+    if (request === "Nut") {
+      return `Squirrel: I'll eat the ${request}.`;
     }
     return super.handle(request);
   }
 }
-const handler1 = new ConcreteHandler1();
-const handler2 = new ConcreteHandler2();
-handler1.setNext(handler2);
-console.log(handler1.handle(1));
-console.log(handler1.handle(2));
-console.log(handler1.handle(3)); */
+
+class DogHandler extends AbstractHandler {
+  public handle(request: string): string {
+    if (request === "MeatBall") {
+      return `Dog: I'll eat the ${request}.`;
+    }
+    return super.handle(request);
+  }
+}
+
+function clientCode(handler: Handler) {
+  const foods = ["Nut", "Banana", "Cup of coffee"];
+
+  for (const food of foods) {
+    console.log(`Client: Who wants a ${food}?`);
+
+    const result = handler.handle(food);
+    if (result) {
+      console.log(`  ${result}`);
+    } else {
+      console.log(`  ${food} was left untouched.`);
+    }
+  }
+}
+
+const monkey = new MonkeyHandler();
+const squirrel = new SquirrelHandler();
+const dog = new DogHandler();
+
+monkey.setNext(squirrel).setNext(dog);
+
+console.log("Chain: Monkey > Squirrel > Dog\n");
+clientCode(monkey);
+console.log("");
+
+console.log("Subchain: Squirrel > Dog\n");
+clientCode(squirrel); */
+
+interface Handler {
+  setNext(): Handler;
+  handle(food:string): string;
+}
+
+abstract class AbstractHandler implements Handler {
+  private nextHandler: Handler;
+  protected setNext(handler: Handler) {
+    this.nextHandler = handler;
+    return handler;
+  }
+  protected handle(food:string):string {
+    if (this.nextHandler) return this.nextHandler.handle();
+    return ''
+}
+
+class MonkeyHandler extends AbstractHandler{
+  public handle(food:string):string{
+    if(food==='banana'){
+      return 'monkey like banana'
+    }
+    return super.handle(food)
+  }
+}
 
 // 2. 命令
 /* class Command {
