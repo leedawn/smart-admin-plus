@@ -1,4 +1,5 @@
-import { delay, promiseLock, refreshPromiseLock } from "../src/async";
+import { delay } from "../src/async";
+import { promiseLock, refreshPromiseLock } from "../src/async/promise-lock";
 
 test("异步延迟函数", async () => {
   const callTime = Date.now();
@@ -6,7 +7,7 @@ test("异步延迟函数", async () => {
   expect(Date.now() - callTime).toBeGreaterThanOrEqual(100);
 });
 
-describe("promiseLocak", () => {
+describe("promiseLock 函数用法", () => {
   test("promiseLock 基础例子", async () => {
     const fn = jest.fn();
     const asyncFn = () => delay(100).then(() => fn());
@@ -41,26 +42,41 @@ describe("promiseLocak", () => {
     const asyncFn = () => delay(100).then(() => fn());
     const asyncFnWithLock = promiseLock(asyncFn, {
       keyGenerator: () => "key",
-      // forever: false,
+      forever: true,
     });
     const [res1, res2, res3] = await Promise.all([
       asyncFnWithLock(),
       asyncFnWithLock(),
       asyncFnWithLock(),
     ]);
-    console.log("wow");
-
     await asyncFnWithLock();
     expect(res1).toStrictEqual(res2);
     expect(res2).toStrictEqual(res3);
     expect(fn).toBeCalledTimes(1);
   });
 
+  test("promiseLock 的没有 forever 功能", async () => {
+    const fn = jest.fn();
+    const asyncFn = () => delay(100).then(() => fn());
+    const asyncFnWithLock = promiseLock(asyncFn, {
+      keyGenerator: () => "key",
+      forever: false,
+    });
+    const [res1, res2, res3] = await Promise.all([
+      asyncFnWithLock(),
+      asyncFnWithLock(),
+      asyncFnWithLock(),
+    ]);
+    await asyncFnWithLock();
+    expect(res1).toStrictEqual(res2);
+    expect(res2).toStrictEqual(res3);
+    expect(fn).toBeCalledTimes(2);
+  });
+
   test("promiseLock 的清除锁功能", async () => {
     const fn = jest.fn();
     const asyncFn = () => delay(100).then(() => fn());
     const asyncFnWithLock = promiseLock(asyncFn, () => "key");
-    await asyncFnWithLock();
     await asyncFnWithLock();
     expect(fn).toBeCalledTimes(1);
     expect(refreshPromiseLock(asyncFnWithLock)).toBeTruthy();
@@ -69,15 +85,25 @@ describe("promiseLocak", () => {
     expect(refreshPromiseLock(() => {})).toBeFalsy();
   });
 
-  // test("promiseLock 的 forever 和 refresh 功能", async () => {
-  //   const fn = jest.fn();
-  //   const asyncFn = () => delay(100).then(() => fn());
-  //   const asyncFnWithLock = promiseLock(asyncFn, {
-  //     forever: true,
-  //     keyGenerator: () => "key",
-  //   });
-  //   await Promise.all([asyncFnWithLock(), asyncFnWithLock()]);
-  //   await asyncFnWithLock();
-  //   expect(fn).toBeCalledTimes(1);
-  // });
+  test("promiseLock 的 catch 情况", async () => {
+    const trace = jest.fn();
+    const fn = jest.fn();
+    const asyncFn = () => new Promise((_, reject) => reject());
+    const asyncFnWithLock = promiseLock(asyncFn, {
+      keyGenerator: () => "key",
+      trace,
+    });
+
+    await Promise.allSettled([asyncFnWithLock(), asyncFnWithLock()]).then(
+      (rrr) => {
+        for (const item of rrr) {
+          if (item.status === "rejected") {
+            fn();
+          }
+        }
+      }
+    );
+    expect(trace).toBeCalledTimes(1);
+    expect(fn).toBeCalledTimes(2);
+  });
 });

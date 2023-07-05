@@ -542,7 +542,7 @@ console.log("");
 console.log("Subchain: Squirrel > Dog\n");
 clientCode(squirrel); */
 
-interface Handler {
+/* interface Handler {
   setNext(): Handler;
   handle(food:string): string;
 }
@@ -565,7 +565,7 @@ class MonkeyHandler extends AbstractHandler{
     }
     return super.handle(food)
   }
-}
+} */
 
 // 2. 命令
 /* class Command {
@@ -846,54 +846,46 @@ const context = new Context(new ConcreteStateA());
 context.request1();
 context.request2(); */
 
-// 10. 模板方法
+// 10. 模板方法。基类定义算法框架，子类在不修改结构的情况下重写特定的步骤。
 /* abstract class AbstractClass {
-  operation1() {
-    console.log("default operation1");
+  protected operation1(): string {
+    return "default operation1";
   }
-  operation2() {
-    console.log("default operation1");
+  protected operation2(): string {
+    return "default operation2";
   }
-  templateMethod() {
-    this.operation1();
-    this.operation2();
-  }
-}
-class ConstreteClass extends AbstractClass {
-  operation1() {
-    console.log("constrete operation");
+  public templateMethod(): string {
+    return this.operation1() + " " + this.operation2();
   }
 }
-new ConstreteClass().templateMethod(); */
+class ConcreteClass extends AbstractClass {
+  protected operation1(): string {
+    return "concrete operation1";
+  }
+}
 
-//  11. 拜访者
-/* interface Visitor {
-  visitA(e: ConcreteElementA): void;
-  visitB(e: ConcreteElementB): void;
-}
-class ConstreteVisitor1 implements Visitor {
-  visitA(e) {
-    console.log(e);
-    console.log(`第一种对A的访问,id为：${e.state}`);
-  }
-  visitB(e) {
-    console.log(`第一种对B的访问,id为：${e.state}`);
-  }
-}
-interface ElementInterface {
+const res = new ConcreteClass().templateMethod();
+console.log(res); */
+
+//  11. 拜访者。将算法和作用的对象分开。
+interface Component {
   accept(visitor: Visitor): void;
 }
-class ConcreteElementA implements ElementInterface {
-  state = "a";
-  accept(visitor: Visitor) {
-    visitor.visitA(this);
+
+class ConcreteComponent implements Component {
+  public accept(visitor: Visitor) {
+    visitor.visitConcreteComponent(this);
+  }
+  public componentMethod(): string {
+    return "a";
   }
 }
-class ConcreteElementB implements ElementInterface {
-  state = "b";
-  accept(visitor: Visitor) {
-    visitor.visitB(this);
+interface Visitor {
+  visitConcreteComponent(element: ConcreteComponent): void;
+}
+class ConcreteVisitor implements Visitor {
+  public visitConcreteComponent(element: ConcreteComponent): void {
+    console.log(element.componentMethod() + " + visitor");
   }
 }
-new ConcreteElementA().accept(new ConstreteVisitor1());
-new ConcreteElementB().accept(new ConstreteVisitor1()); */
+new ConcreteComponent().accept(new ConcreteVisitor());
