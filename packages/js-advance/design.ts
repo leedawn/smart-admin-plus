@@ -615,236 +615,375 @@ invoker.onStep2(); */
 console.log(new Expression().interpret("2222")); */
 
 // 4. 迭代器
-/* interface IteratorInterface<T> {
-  first(): T;
+
+interface Iterator<T> {
+  current(): T;
   next(): T;
-  isDone: boolean;
-  curItem: T;
+  key(): number;
+  valid(): boolean;
+  rewind(): void;
 }
+
 interface Aggregator {
-  createIterator(): IteratorInterface<string>;
+  getIterator(): Iterator<string>;
 }
-class ConcreteAggregator implements Aggregator {
-  items: string[] = [];
-  addItem(i: string) {
-    this.items.push(i);
-    return this;
+
+class AlphabeticalOrderIterator implements Iterator<string> {
+  private collection: WordsCollection;
+  private position: number = 0;
+  private reverse: boolean = false;
+
+  constructor(collection: WordsCollection, reverse: boolean = false) {
+    this.collection = collection;
+    this.reverse = reverse;
+
+    if (reverse) {
+      this.position = collection.getCount() - 1;
+    }
   }
-  createIterator() {
-    return new ConcreteIterator(this);
+
+  public rewind() {
+    this.position = this.reverse ? this.collection.getCount() - 1 : 0;
   }
-}
-class ConcreteIterator implements IteratorInterface<string> {
-  location: number = 0;
-  constructor(private collection: ConcreteAggregator) {}
-  first() {
-    return this.collection.items[0];
+
+  public current(): string {
+    return this.collection.getItems()[this.position];
   }
-  next() {
-    const item = this.collection.items[this.location];
-    this.location += 1;
+
+  public key(): number {
+    return this.position;
+  }
+
+  public next(): string {
+    const item = this.collection.getItems()[this.position];
+    this.position += this.reverse ? -1 : 1;
     return item;
   }
-  get isDone() {
-    return this.location >= this.collection.items.length;
-  }
-  get curItem() {
-    return this.collection.items[this.location];
+
+  public valid(): boolean {
+    if (this.reverse) {
+      return this.position >= 0;
+    }
+
+    return this.position < this.collection.getCount();
   }
 }
-const aggregator = new ConcreteAggregator();
-aggregator.addItem("first").addItem("second").addItem("third");
-const iterator = aggregator.createIterator();
-while (!iterator.isDone) {
-  console.log(iterator.next());
-} */
 
-// 5. 中介
+class WordsCollection implements Aggregator {
+  private items: string[] = [];
+
+  public getItems(): string[] {
+    return this.items;
+  }
+
+  public getCount(): number {
+    return this.items.length;
+  }
+
+  public addItem(item: string): void {
+    this.items.push(item);
+  }
+
+  public getIterator(): Iterator<string> {
+    return new AlphabeticalOrderIterator(this);
+  }
+
+  public getReverseIterator(): Iterator<string> {
+    return new AlphabeticalOrderIterator(this, true);
+  }
+}
+
+const collection = new WordsCollection();
+collection.addItem("First");
+collection.addItem("Second");
+collection.addItem("Third");
+
+const iterator = collection.getIterator();
+
+console.log("Straight traversal:");
+while (iterator.valid()) {
+  console.log(iterator.next());
+}
+
+console.log("");
+console.log("Reverse traversal:");
+const reverseIterator = collection.getReverseIterator();
+while (reverseIterator.valid()) {
+  console.log(reverseIterator.next());
+}
+
+// 5. 中介。让程序通过中介对象进行交互，减少相互之间的依赖。
 /* interface Mediator {
-  notify(receiver: string): void;
+  notify(event: string): void;
 }
 class ConcreteMediator implements Mediator {
-  constructor(private c1: Colleague, private c2: Colleague) {
-    c1.setMediator(this);
-    c2.setMediator(this);
+  private componentA: ComponentA;
+  private componentB: ComponentB;
+  constructor(componentA: ComponentA, componentB: ComponentB) {
+    this.componentA = componentA;
+    this.componentA.setMediator(this);
+    this.componentB = componentB;
+    this.componentB.setMediator(this);
   }
-  notify(receiver) {
-    this[receiver] && this[receiver].toDo();
-  }
-}
-class Colleague {
-  mediator: Mediator;
-  setMediator(m: Mediator) {
-    this.mediator = m;
-  }
-  toDo() {}
-  toCall(listener: string) {}
-}
-class ConcreteColleague1 extends Colleague {
-  toDo() {
-    console.log("对象1被被调用");
-  }
-  toCall(listener: string) {
-    console.log("对象1发起调用");
-    this.mediator.notify(listener);
+  public notify(event: string): void {
+    if (event === "A2") {
+      this.componentA.doA1();
+      this.componentB.doB();
+    }
   }
 }
-class ConcreteColleague2 extends Colleague {
-  toDo() {
-    console.log("对象2被被调用");
-  }
-  toCall(listener: string) {
-    console.log("对象2发起调用");
-    this.mediator.notify(listener);
-  }
-}
-const c1 = new ConcreteColleague1();
-const c2 = new ConcreteColleague2();
-const m = new ConcreteMediator(c1, c2);
-c1.toCall("c2");
-c2.toCall("c1"); */
 
-// 6. 备忘录
-/* class Memento {
-  private state: number;
-  getState() {
-    return this.state;
+class BaseComponent {
+  protected mediator: Mediator;
+  setMediator(mediator: Mediator) {
+    this.mediator = mediator;
   }
-  setState(state) {
+}
+class ComponentA extends BaseComponent {
+  public doA1(): void {
+    console.log("A1");
+    this.mediator.notify("A1");
+  }
+  public doA2(): void {
+    console.log("A2");
+    this.mediator.notify("A2");
+  }
+}
+class ComponentB extends BaseComponent {
+  public doB(): void {
+    console.log("B");
+  }
+}
+
+const a = new ComponentA();
+const b = new ComponentB();
+const mediator = new ConcreteMediator(a, b);
+a.doA2(); */
+
+// 6. 备忘录。生成对象的状态并在之后还原
+/* class Originator {
+  private state: string;
+  constructor(state: string) {
     this.state = state;
   }
-}
-class Originator {
-  constructor(private memento: Memento, public state: number) {}
-  save() {
-    this.memento.setState(this.state);
+  public doSomething(): void {
+    const str = "abcdefghijklmnopqrstuvwxyz";
+    this.state = new Array(30)
+      .fill("")
+      .map(() => str[~~(Math.random() * str.length)])
+      .join(",");
   }
-  chenge() {
-    this.state += 1;
+  public save(): Memento {
+    return new Memento(this.state);
   }
-  check() {
-    return this.memento.getState();
-  }
-}
-const o = new Originator(new Memento(), 0);
-console.log(o.state);
-o.save();
-o.chenge();
-console.log(o.state);
-console.log(o.check()); */
-
-// 7. 观察者
-/* interface Observer {
-  update(state: number): void;
-  observerState: number;
-}
-class ConcreteObserver implements Observer {
-  observerState = 0;
-  constructor(public id) {}
-  update(state) {
-    this.observerState = state;
+  public restore(memento: Memento): void {
+    this.state = memento.getState();
+    console.log(this.state);
   }
 }
-class Subject {
-  constructor(private state: number) {}
-  observers: ConcreteObserver[] = [];
-  init() {
-    this.notify();
+class Memento {
+  private state: string;
+  private date: string;
+  constructor(state) {
+    this.state = state;
+    this.date = new Date().toISOString().slice(0, 23).replace("T", " ");
   }
-  attach(o: ConcreteObserver) {
-    if (!this.observers.find((item) => item.id === o.id)) {
-      this.observers.push(o);
+  public getState(): string {
+    return this.state.substring(0, 12);
+  }
+  public getName(): string {
+    return this.getState() + " " + this.getDate();
+  }
+  public getDate(): string {
+    return this.date;
+  }
+}
+class Caretaker {
+  private mementos: Memento[] = [];
+  private originator: Originator;
+  constructor(originator: Originator) {
+    this.originator = originator;
+  }
+  public backup(): void {
+    this.mementos.push(this.originator.save());
+  }
+  public undo(): void {
+    if (!this.mementos.length) return;
+    this.originator.restore(this.mementos.pop());
+  }
+  public showHistory(): void {
+    for (const memento of this.mementos) {
+      console.log(memento.getName());
     }
-    return this;
   }
-  detach(o: ConcreteObserver) {
-    const index = this.observers.findIndex((item) => (item.id = o.id));
-    this.observers.splice(index, 1);
+}
+const originator = new Originator("111");
+const caretaker = new Caretaker(originator);
+caretaker.backup();
+originator.doSomething();
+caretaker.backup();
+originator.doSomething();
+caretaker.backup();
+
+caretaker.showHistory();
+caretaker.undo();
+caretaker.undo();
+caretaker.showHistory();
+ */
+// 7. 观察者。一个对象将其状态改变的消息通知到其他对象
+
+/* interface Subject {
+  attach(observer: Observer): void;
+  detach(observer: Observer): void;
+  notify(): void;
+}
+class ConcreteSubject implements Subject {
+  public state: number;
+  private observers: Observer[] = [];
+  public attach(observer: Observer): void {
+    const isExist = this.observers.includes(observer);
+    if (isExist) {
+      console.log("this observer has exist");
+    }
+    this.observers.push(observer);
   }
-  notify() {
-    console.log(this.observers);
-    this.observers.forEach((item) => item.update(this.state));
+
+  public detach(observer: Observer): void {
+    const target = this.observers.indexOf(observer);
+    if (target === -1) {
+      console.log("this observer has not exist");
+    }
+    this.observers.splice(target, 1);
   }
-  modifyState() {
-    this.state += 1;
+
+  public notify(): void {
+    for (const observer of this.observers) {
+      observer.update(this);
+    }
+  }
+
+  public doSomeLogic() {
+    this.state = ~~(Math.random() * 10);
+    console.log(
+      "🚀 ~ file: design.ts:846 ~ ConcreteSubject ~ doSomeLogic ~ this.state:",
+      this.state
+    );
     this.notify();
   }
 }
-const o1 = new ConcreteObserver("a");
-const o2 = new ConcreteObserver("b");
-const s = new Subject(1);
-s.attach(o1).attach(o2).init();
-console.log(o1.observerState);
-console.log(o2.observerState);
-s.modifyState();
-console.log(o1.observerState);
-console.log(o2.observerState); */
+
+interface Observer {
+  update(subject: Subject): void;
+}
+
+class ConcreteObserverA implements Observer {
+  public update(subject: Subject): void {
+    if (subject instanceof ConcreteSubject && subject.state > 3) {
+      console.log("concreteObserverA say");
+    }
+  }
+}
+
+class ConcreteObserverB implements Observer {
+  public update(subject: Subject): void {
+    if (subject instanceof ConcreteSubject && subject.state < 3) {
+      console.log("concreteObserverB say");
+    }
+  }
+}
+const concreteObserverA = new ConcreteObserverA();
+const concreteObserverB = new ConcreteObserverB();
+const concreteSubject = new ConcreteSubject();
+concreteSubject.attach(concreteObserverA);
+concreteSubject.attach(concreteObserverB);
+concreteSubject.doSomeLogic();
+concreteSubject.detach(concreteObserverA);
+concreteSubject.doSomeLogic(); */
 
 // 8. 状态
 //  每个状态新建一个类，将状态对应的行为保存到对应的类中。
 //  上下文不会自行实现状态行为，而是会保存指向状态对象的引用。
 //  所有状态类遵循同一个接口，上下文仅通过接口和对象交互。
+// 对象的内部状态变化时，改变行为。
 /* class Context {
   private state: State;
-
   constructor(state: State) {
     this.transitionTo(state);
   }
+  public transitionTo(state: State) {
+    console.log(state.constructor.name);
 
-  public transitionTo(state: State): void {
-    console.log(`Context: Transition to ${(<any>state).constructor.name}.`);
     this.state = state;
     this.state.setContext(this);
   }
-
-  public request1(): void {
+  public request1() {
     this.state.handle1();
   }
-
-  public request2(): void {
+  public request2() {
     this.state.handle2();
   }
 }
 
 abstract class State {
   protected context: Context;
-
   public setContext(context: Context) {
     this.context = context;
   }
-
-  public abstract handle1(): void;
-
-  public abstract handle2(): void;
+  public handle1(): void {}
+  public handle2(): void {}
 }
 
 class ConcreteStateA extends State {
-  public handle1(): void {
-    console.log("ConcreteStateA handles request1.");
-    console.log("ConcreteStateA wants to change the state of the context.");
+  handle1() {
+    console.log("ConcreteStateA->handle1");
     this.context.transitionTo(new ConcreteStateB());
   }
-
-  public handle2(): void {
-    console.log("ConcreteStateA handles request2.");
-  }
 }
-
 class ConcreteStateB extends State {
-  public handle1(): void {
-    console.log("ConcreteStateB handles request1.");
-  }
-
   public handle2(): void {
-    console.log("ConcreteStateB handles request2.");
-    console.log("ConcreteStateB wants to change the state of the context.");
+    console.log("ConcreteStateB->handle2");
     this.context.transitionTo(new ConcreteStateA());
   }
 }
-
 const context = new Context(new ConcreteStateA());
 context.request1();
 context.request2(); */
+
+// 9. 策略
+/* class Context {
+  private strategy: Strategy;
+  constructor(strategy: Strategy) {
+    this.strategy = strategy;
+  }
+  public setStrategy(strategy: Strategy) {
+    this.strategy = strategy;
+  }
+  public doSomeLogic(): void {
+    const arr = ["a", "b", "c", "d"];
+    this.strategy.doAlgorithm(arr);
+    console.log(arr);
+  }
+}
+
+interface Strategy {
+  doAlgorithm(data: string[]): string[];
+}
+
+class ConcreteStrategyA implements Strategy {
+  public doAlgorithm(data: string[]): string[] {
+    return data.sort();
+  }
+}
+class ConcreteStrategyB implements Strategy {
+  public doAlgorithm(data: string[]): string[] {
+    return data.reverse();
+  }
+}
+
+const context = new Context(new ConcreteStrategyA());
+context.doSomeLogic();
+context.setStrategy(new ConcreteStrategyB());
+context.doSomeLogic(); */
 
 // 10. 模板方法。基类定义算法框架，子类在不修改结构的情况下重写特定的步骤。
 /* abstract class AbstractClass {
@@ -867,8 +1006,8 @@ class ConcreteClass extends AbstractClass {
 const res = new ConcreteClass().templateMethod();
 console.log(res); */
 
-//  11. 拜访者。将算法和作用的对象分开。
-interface Component {
+//  11. 拜访者。将算法和作用的对象分开。接受其他对象来调用自身的方法。
+/* interface Component {
   accept(visitor: Visitor): void;
 }
 
@@ -888,4 +1027,4 @@ class ConcreteVisitor implements Visitor {
     console.log(element.componentMethod() + " + visitor");
   }
 }
-new ConcreteComponent().accept(new ConcreteVisitor());
+new ConcreteComponent().accept(new ConcreteVisitor()); */

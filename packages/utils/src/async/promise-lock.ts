@@ -1,4 +1,4 @@
-type KeyGenerator = () => string;
+type KeyGenerator = () => string | ((arg0: string) => string);
 type traceFn = (...args: string[]) => string;
 
 interface PromiseLockOptions {

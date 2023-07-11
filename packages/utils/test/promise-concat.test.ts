@@ -10,7 +10,7 @@ test("异步函数合并", async () => {
   const b = [2, 3, 4].map(concatSquare);
   await Promise.all([...a, ...b]);
   expect(square).toBeCalledTimes(2);
-  //   expect(square).nthCalledWith(1, [1, 2, 3]);
+  expect(square).nthCalledWith(1, [1, 2, 3]);
   //   expect(square).nthCalledWith(2, [2, 3, 4]);
   //   expect(result).toEqual([1, 4, 9, 4, 9, 16]);
 });
