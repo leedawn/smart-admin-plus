@@ -462,255 +462,78 @@ proxySubject.request(); */
 
 // 行为模式：包含算法和对象间的职责分配
 
-// 1. 职责链
+// 4. 迭代器。不暴露复杂结构细节的条件下遍历里面的元素
+/* class OrderIterator {
+  private collection: Collection;
+  private position: number;
+  private reverse: boolean;
 
-/* interface Handler {
-  setNext(handler: Handler): Handler;
-
-  handle(request: string): string;
-}
-
-abstract class AbstractHandler implements Handler {
-  private nextHandler: Handler;
-
-  public setNext(handler: Handler): Handler {
-    this.nextHandler = handler;
-    return handler;
-  }
-
-  public handle(request: string): string {
-    if (this.nextHandler) {
-      return this.nextHandler.handle(request);
-    }
-
-    return null;
-  }
-}
-
-class MonkeyHandler extends AbstractHandler {
-  public handle(request: string): string {
-    if (request === "Banana") {
-      return `Monkey: I'll eat the ${request}.`;
-    }
-    return super.handle(request);
-  }
-}
-
-class SquirrelHandler extends AbstractHandler {
-  public handle(request: string): string {
-    if (request === "Nut") {
-      return `Squirrel: I'll eat the ${request}.`;
-    }
-    return super.handle(request);
-  }
-}
-
-class DogHandler extends AbstractHandler {
-  public handle(request: string): string {
-    if (request === "MeatBall") {
-      return `Dog: I'll eat the ${request}.`;
-    }
-    return super.handle(request);
-  }
-}
-
-function clientCode(handler: Handler) {
-  const foods = ["Nut", "Banana", "Cup of coffee"];
-
-  for (const food of foods) {
-    console.log(`Client: Who wants a ${food}?`);
-
-    const result = handler.handle(food);
-    if (result) {
-      console.log(`  ${result}`);
-    } else {
-      console.log(`  ${food} was left untouched.`);
-    }
-  }
-}
-
-const monkey = new MonkeyHandler();
-const squirrel = new SquirrelHandler();
-const dog = new DogHandler();
-
-monkey.setNext(squirrel).setNext(dog);
-
-console.log("Chain: Monkey > Squirrel > Dog\n");
-clientCode(monkey);
-console.log("");
-
-console.log("Subchain: Squirrel > Dog\n");
-clientCode(squirrel); */
-
-/* interface Handler {
-  setNext(): Handler;
-  handle(food:string): string;
-}
-
-abstract class AbstractHandler implements Handler {
-  private nextHandler: Handler;
-  protected setNext(handler: Handler) {
-    this.nextHandler = handler;
-    return handler;
-  }
-  protected handle(food:string):string {
-    if (this.nextHandler) return this.nextHandler.handle();
-    return ''
-}
-
-class MonkeyHandler extends AbstractHandler{
-  public handle(food:string):string{
-    if(food==='banana'){
-      return 'monkey like banana'
-    }
-    return super.handle(food)
-  }
-} */
-
-// 2. 命令
-/* class Command {
-  constructor(protected receiver: Receiver) {
-    console.log(receiver);
-  }
-  execute() {
-    console.log("default execute");
-  }
-}
-class Receiver {
-  constructor(private name = "") {}
-  action() {
-    console.log("name:" + this.name);
-  }
-}
-class ConcreteCommand extends Command {
-  execute() {
-    console.log("concrete execute");
-    this.receiver.action();
-  }
-}
-class Invoker {
-  private defaultStep = () => {
-    console.log("default step");
-  };
-  onStep1: () => void = this.defaultStep;
-  onStep2: () => void = this.defaultStep;
-  setStep1(c: Command) {
-    this.onStep1 = c.execute.bind(c); //注意这里绑定this，不然执行其中的this指向invoker
-  }
-  setStep2(c: Command) {
-    this.onStep2 = c.execute.bind(c);
-  }
-}
-const invoker = new Invoker();
-invoker.setStep1(new ConcreteCommand(new Receiver("xiaoming")));
-invoker.onStep1();
-invoker.onStep2(); */
-
-// 3. 解释器
-/* class Expression {
-  interpret(props: string) {
-    return props.length;
-  }
-}
-console.log(new Expression().interpret("2222")); */
-
-// 4. 迭代器
-
-interface Iterator<T> {
-  current(): T;
-  next(): T;
-  key(): number;
-  valid(): boolean;
-  rewind(): void;
-}
-
-interface Aggregator {
-  getIterator(): Iterator<string>;
-}
-
-class AlphabeticalOrderIterator implements Iterator<string> {
-  private collection: WordsCollection;
-  private position: number = 0;
-  private reverse: boolean = false;
-
-  constructor(collection: WordsCollection, reverse: boolean = false) {
+  constructor(collection: Collection, reverse?: boolean) {
     this.collection = collection;
-    this.reverse = reverse;
-
     if (reverse) {
-      this.position = collection.getCount() - 1;
+      this.position = this.collection.getCounts() - 1;
+      this.reverse = true;
+    } else {
+      this.position = 0;
+      this.reverse = false;
     }
   }
 
-  public rewind() {
-    this.position = this.reverse ? this.collection.getCount() - 1 : 0;
+  public rewind(): void {
+    this.position = this.reverse ? this.collection.getCounts() - 1 : 0;
   }
-
-  public current(): string {
-    return this.collection.getItems()[this.position];
-  }
-
   public key(): number {
     return this.position;
   }
-
   public next(): string {
     const item = this.collection.getItems()[this.position];
     this.position += this.reverse ? -1 : 1;
     return item;
   }
-
-  public valid(): boolean {
-    if (this.reverse) {
-      return this.position >= 0;
-    }
-
-    return this.position < this.collection.getCount();
+  public current(): string {
+    return this.collection.getItems()[this.position];
+  }
+  public isValid(): boolean {
+    return this.reverse
+      ? this.position >= 0
+      : this.position < this.collection.getCounts();
   }
 }
 
-class WordsCollection implements Aggregator {
+class Collection {
   private items: string[] = [];
-
+  public getCounts(): number {
+    return this.items.length;
+  }
   public getItems(): string[] {
     return this.items;
   }
-
-  public getCount(): number {
-    return this.items.length;
-  }
-
   public addItem(item: string): void {
     this.items.push(item);
   }
-
-  public getIterator(): Iterator<string> {
-    return new AlphabeticalOrderIterator(this);
+  public getIterator(): OrderIterator {
+    return new OrderIterator(this);
   }
-
-  public getReverseIterator(): Iterator<string> {
-    return new AlphabeticalOrderIterator(this, true);
+  public getReverseIterator(): OrderIterator {
+    return new OrderIterator(this, true);
   }
 }
 
-const collection = new WordsCollection();
-collection.addItem("First");
-collection.addItem("Second");
-collection.addItem("Third");
+const collection = new Collection();
+collection.addItem("first");
+collection.addItem("second");
+collection.addItem("third");
 
 const iterator = collection.getIterator();
-
-console.log("Straight traversal:");
-while (iterator.valid()) {
+while (iterator.isValid()) {
   console.log(iterator.next());
 }
 
-console.log("");
-console.log("Reverse traversal:");
 const reverseIterator = collection.getReverseIterator();
-while (reverseIterator.valid()) {
-  console.log(reverseIterator.next());
-}
+console.log(reverseIterator.next());
+console.log(reverseIterator.key());
+reverseIterator.rewind();
+console.log(reverseIterator.current()); */
 
 // 5. 中介。让程序通过中介对象进行交互，减少相互之间的依赖。
 /* interface Mediator {
