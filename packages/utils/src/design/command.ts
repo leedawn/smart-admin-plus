@@ -44,10 +44,6 @@ export class Invoker {
     return command.execute !== undefined;
   }
   public doSomething(): string {
-    if (this.isCommand(this.onStart) && this.isCommand(this.onEnd)) {
-      return this.onStart.execute() + " " + this.onEnd.execute();
-    } else {
-      return "";
-    }
+    return this.isCommand(this.onStart) && this.isCommand(this.onEnd) ? this.onStart.execute() + " " + this.onEnd.execute() : "";
   }
 }
