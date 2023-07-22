@@ -1,4 +1,4 @@
-// 7. 观察者。主体对象可以保存或者删除观察者对象。当状态变化后会通知观察者对象。
+// 7. 观察者。一个对象状态改变后可以通知其他对象
 
 interface Subject {
   attach(observer: Observer): void;

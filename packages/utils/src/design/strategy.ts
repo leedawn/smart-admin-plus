@@ -1,4 +1,4 @@
-// 9. 策略。context 拥有保存对象的变量，使用不同对象的方法可以得到不同的结果
+// 9. 策略。一组行为转换为对象，可以在上下文对象内部相互替换
 export class Context {
   private strategy: Strategy;
   constructor(strategy: Strategy) {

@@ -8,6 +8,18 @@ import { ConcreteClass } from "../src/design/template";
 import { Caretaker, Originator } from "../src/design/memento";
 import { ComponentA, ComponentB, ConcreteMediator } from "../src/design/mediator";
 import { Collection } from "../src/design/iterator";
+import { RealSubject, ProxySubject } from "../src/design/proxy";
+import { FlyweightFactory } from "../src/design/flyweight";
+import { Subsystem1, Subsystem2, Facade } from "../src/design/facade";
+import { ConcreteDecorator, DecoratorConcreteComponent } from "../src/design/decorator";
+import { Leaf, Composite } from "../src/design/composite";
+import { ConcreteImplementation, ExtendedAbstraction, Abstraction } from "../src/design/bridge";
+import { Target, Adaptee, Adapter } from "../src/design/adapter";
+import { Singleton } from "../src/design/singleton";
+import { ConcreteBuilder } from "../src/design/builder";
+import { ConcreteFactory } from "../src/design/abstractFactory";
+import { Prototype, ComponentWithBackReference } from "../src/design/prototype";
+import { ConcreteCreator } from "../src/design/factoryMethod";
 
 describe("behavior pattern", () => {
   test("chain-of-responsibility", () => {
@@ -106,5 +118,110 @@ describe("behavior pattern", () => {
     expect(reverseIterator.key()).toEqual(1);
     reverseIterator.rewind();
     expect(reverseIterator.current()).toEqual(arr[2]);
+  });
+});
+
+describe("structure pattern", () => {
+  test("proxy", () => {
+    const realSubject = new RealSubject();
+    const proxySubject = new ProxySubject(realSubject);
+    expect(proxySubject.request()).toEqual("realSubject");
+  });
+
+  test("flyweight", () => {
+    const operators = ["leon"];
+    const cars = [
+      ["Benz", "red"],
+      ["BMW", "red"],
+    ];
+    const additionCar = ["BMW", "yellow"];
+    const factory = new FlyweightFactory(cars);
+    expect(factory.listFlyweights()).toEqual(2);
+    const flyweight1 = factory.getFlyweight(cars[1]);
+    expect(flyweight1.operation(operators)).toEqual(operators.join(",") + ": " + cars[1].join(","));
+    const flyweight2 = factory.getFlyweight(additionCar);
+    expect(flyweight2.operation(operators)).toEqual(operators.join(",") + ": " + additionCar.join(","));
+    expect(factory.listFlyweights()).toEqual(3);
+  });
+
+  test("facade", () => {
+    const s1 = new Subsystem1();
+    const s2 = new Subsystem2();
+    const facade = new Facade(s1, s2);
+    expect(facade.operation()).toEqual(`system1 ready! system2 ready!`);
+  });
+
+  test("decorator", () => {
+    const concreteComponent = new DecoratorConcreteComponent();
+    const concreteDecorator = new ConcreteDecorator(concreteComponent);
+    expect(concreteDecorator.operation()).toEqual("ConcreteDecorator(ConcreteComponent)");
+  });
+
+  test("composite", () => {
+    const leaf = new Leaf();
+    const tree = new Composite();
+    const branch1 = new Composite();
+    branch1.add(leaf);
+    branch1.add(leaf);
+    const branch2 = new Composite();
+    branch2.add(leaf);
+    tree.add(branch1);
+    tree.add(branch2);
+    tree.add(leaf);
+    if (branch2.isComposite()) {
+      branch2.remove(leaf);
+    }
+    expect(tree.operation()).toEqual("Branch(Branch(Leaf+Leaf)+Branch()+Leaf)");
+  });
+
+  test("bridge", () => {
+    const implementation = new ConcreteImplementation();
+    const abstraction = new Abstraction(implementation);
+    expect(abstraction.operation()).toEqual("Abstraction: operationImplementation");
+    const extendedAbstraction = new ExtendedAbstraction(implementation);
+    expect(extendedAbstraction.operation()).toEqual("ExtendedAbstraction: operationImplementation");
+  });
+
+  test("adapter", () => {
+    const target = new Target();
+    expect(target.request()).toEqual("request");
+
+    const adaptee = new Adaptee();
+    const adapter = new Adapter(adaptee);
+    expect(adapter.request()).toEqual("special request");
+  });
+});
+
+describe("create mode", () => {
+  test("singleton", () => {
+    expect(Singleton.getInstance()).toEqual(Singleton.getInstance());
+  });
+  test("builder", () => {
+    const builder = new ConcreteBuilder();
+    builder.producePartA();
+    expect(builder.getProducts().listParts()).toEqual("all products: partA");
+  });
+
+  test("abstract factory", () => {
+    const factory = new ConcreteFactory();
+    const productA = factory.createProductA();
+    const productB = factory.createProductB();
+    expect(productB.anotherUsefulFunction(productA)).toEqual("this is from productA and this is from productB");
+  });
+
+  test("prototype", () => {
+    const p = new Prototype();
+    p.primitive = 2;
+    p.component = new Date();
+    p.circularComponent = new ComponentWithBackReference(p);
+    const p2 = p.clone();
+    expect(p.primitive).toEqual(p2.primitive);
+    expect(p.component).not.toEqual(p2.component);
+    expect(p.circularComponent).not.toStrictEqual(p2.circularComponent);
+    expect(p.circularComponent.prototype).not.toStrictEqual(p2.circularComponent.prototype);
+  });
+
+  test("factory method", () => {
+    expect(new ConcreteCreator().someOperation()).toEqual("ConcreteProduct");
   });
 });

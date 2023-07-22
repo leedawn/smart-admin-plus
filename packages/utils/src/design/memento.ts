@@ -1,4 +1,4 @@
-// 6. 备忘录。生成对象的状态并在之后还原
+// 6. 备忘录。生成对象状态的快照并在之后还原
 export class Originator {
   private state: string;
   constructor(state: string) {

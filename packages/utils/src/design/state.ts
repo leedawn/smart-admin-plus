@@ -1,6 +1,5 @@
 // 8. 状态
-// 上下文对象保存状态对象，调用状态对象的方法。
-// 每个状态对象不仅定义方法，还保存了上下文。
+// 一个对象的内部状态发生变化时，改变其行为
 export class StateContext {
   private state!: State;
   constructor(state: State) {
