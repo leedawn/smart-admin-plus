@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "rimraf coverage && jest design --coverage",
+    "test": "rimraf coverage && jest data-structure --coverage",
     "build": "rimraf dist && tsc"
   },
   "keywords": [],
