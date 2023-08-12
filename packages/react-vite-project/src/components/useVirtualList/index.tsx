@@ -51,7 +51,7 @@ function useVirtualList<T = unknown>(list: any, options: ListOptions) {
     calculateRange();
   }
 
-  return [visibleList, scrollTo];
+  return [visibleList, scrollTo] as const;
 }
 
 export default useVirtualList;

@@ -8,13 +8,16 @@ type actionType = Partial<RouteType> & {
   type: 'add' | 'delete' | 'edit';
 };
 
-export function taskReducer(routes: RouteType[], action: actionType) {
+export function taskReducer(
+  routes: RouteType[],
+  action: actionType
+): RouteType[] {
   switch (action.type) {
     case 'add': {
       return [
         ...routes,
         { id: (action.id as number)++, name: action.name, done: false }
-      ];
+      ] as RouteType[];
     }
     case 'delete': {
       return routes.filter((r) => r.id !== action.id);
@@ -26,7 +29,7 @@ export function taskReducer(routes: RouteType[], action: actionType) {
         } else {
           return item;
         }
-      });
+      }) as RouteType[];
     }
     default: {
       throw new Error('error');

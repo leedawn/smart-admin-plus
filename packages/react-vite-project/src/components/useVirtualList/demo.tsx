@@ -19,10 +19,10 @@ function App() {
 
   useEventListener(
     'keydown',
-    (event) => {
+    (event: any) => {
       if (event?.keyCode === 13) {
-        const index = (event?.target as EventTarget).value;
-        scrollTo(index as number);
+        const { value } = event.target;
+        scrollTo(value as number);
       }
     },
     { target: inputRef }

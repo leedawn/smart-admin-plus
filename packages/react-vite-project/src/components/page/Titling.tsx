@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { LevelContext } from './LevelContext';
 
-export default function Title({ children }) {
+export default function Title({ children }: any): any {
   const level = useContext(LevelContext);
 
   switch (level) {

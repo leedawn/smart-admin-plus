@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { LevelContext } from './LevelContext';
 
-export default function Section({ children }) {
+export default function Section({ children }: any) {
   const level = useContext(LevelContext);
 
   return (

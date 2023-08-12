@@ -1,0 +1,22 @@
+{
+  "name": "mini-plugin-vue-jsx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "debug": "node --inspect-brk vite"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vue/babel-plugin-jsx": "1.1.5",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@babel/core": "7.22.5",
+    "@babel/types": "7.22.5",
+    "vite": "^4.4.8"
+  }
+}
