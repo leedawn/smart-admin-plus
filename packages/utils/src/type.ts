@@ -149,18 +149,16 @@ type FunctionParamsType = MyParameters<typeof foo>; // [arg1: string, arg2: numb
 /**
  * @description 201. ReturnType
  */
-/* const fn = (v: boolean) => {
+const fn = (v: boolean): number => {
   if (v) return 1;
   else return 2;
 };
+const helloFn = () => "hello";
 
-type MyReturnType<T extends Function> = T extends (
-  ...args: unknown[]
-) => infer R
-  ? R
-  : never;
+type MyReturnType<T extends Function> = T extends (...args: unknown[]) => infer R ? R : never;
 
 type a = MyReturnType<typeof fn>; // should be "1 | 2" */
+type b = MyReturnType<typeof helloFn>;
 
 /**
  * @description 202 omit
@@ -222,8 +220,6 @@ type Expected = {
   readonly y: "hey";
 };
 
-type DeepReadonly<T> = T extends never
-  ? T
-  : { readonly [key in keyof T]: T[key] };
+type DeepReadonly<T> = T extends never ? T : { readonly [key in keyof T]: T[key] };
 
 type Todo = DeepReadonly<X>; // should be same as `Expected`
