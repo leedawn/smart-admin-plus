@@ -3,13 +3,13 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import autoprefixer from 'autoprefixer';
 import svgr from 'vite-plugin-svgr';
-import myPlugin from './src/plugins/my-plugin';
+// import myPlugin from './src/plugins/my-plugin';
 
 const variablePath = normalizePath(path.resolve('./src/variable.scss'));
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), svgr(), myPlugin()],
+  plugins: [react(), svgr()],
   css: {
     // modules: {
     //   generateScopedName: "[name]__[local]__[hash:base64:5]",

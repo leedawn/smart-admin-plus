@@ -4,6 +4,7 @@ import VirtualList from './components/useVirtualList/demo';
 import Unmount from './components/useUnmount/demo';
 import EventListener from './components/useEventListener/demo';
 import Test from './components/test';
+import ReduxDemo from './components/redux';
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
   {
     path: '/event-listener',
     element: <EventListener />
+  },
+  {
+    path: '/redux',
+    element: <ReduxDemo />
   }
 ]);
 
@@ -39,6 +44,9 @@ export function NavigationBar() {
       </a>
       <a href={'/test'} style={{ paddingRight: '20px' }}>
         test
+      </a>
+      <a href={'/redux'} style={{ paddingRight: '20px' }}>
+        redux
       </a>
       <a href={'/event-listener'} style={{ paddingRight: '20px' }}>
         event-listener

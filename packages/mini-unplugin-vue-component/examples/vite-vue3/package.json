@@ -1,0 +1,29 @@
+{
+  "name": "fixture",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env DEBUG=unplugin-vue-components:* vite",
+    "build": "cross-env DEBUG=unplugin-vue-components:* vite build",
+    "preview": "cross-env DEBUG=unplugin-vue-components:* vite preview"
+  },
+  "dependencies": {
+    "ant-design-vue": "4",
+    "element-ui": "^2.15.13",
+    "vant": "^4.6.2"
+  },
+  "devDependencies": {
+    "@iconify/json": "^2.2.92",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/compiler-sfc": "^3.3.4",
+    "cross-env": "^7.0.3",
+    "has-pkg": "^0.0.1",
+    "typescript": "^5.1.6",
+    "unplugin-icons": "^0.16.5",
+    "mini-unplugin-vue-component": "workspace:*",
+    "vite": "^4.4.4",
+    "vite-plugin-inspect": "^0.7.33",
+    "vite-plugin-vue-markdown": "^0.23.5",
+    "vue-router": "^4.2.4"
+  }
+}

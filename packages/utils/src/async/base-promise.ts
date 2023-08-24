@@ -61,21 +61,23 @@ export class MyPromise {
 
     const thenPromise = new MyPromise((resolve, reject) => {
       const resolvePromise = (cb: FulfilledFn | RejectedFn) => {
-        try {
-          const x = cb(this.result as string);
-          if (x === thenPromise) {
-            // console.log("🚀 ~ file: base-promise.ts:66 ~ MyPromise ~ resolvePromise ~ x:", x, thenPromise);
-            // throw new Error("不能调用自身");// 这行代码没有用
+        setTimeout(() => {
+          try {
+            const x = cb(this.result as string);
+            if (x === thenPromise) {
+              // console.log("🚀 ~ file: base-promise.ts:66 ~ MyPromise ~ resolvePromise ~ x:", x, thenPromise);
+              // throw new Error("不能调用自身");// 这行代码没有用
+            }
+            if (x instanceof MyPromise) {
+              x.then(resolve, reject); // 链式调用的关键
+            } else {
+              resolve(x);
+            }
+          } catch (err) {
+            reject(err as string);
+            // throw new Error(err as string);
           }
-          if (x instanceof MyPromise) {
-            x.then(resolve, reject);
-          } else {
-            resolve(x);
-          }
-        } catch (err) {
-          reject(err as string);
-          throw new Error(err as string);
-        }
+        }, 0);
       };
 
       if (this.state === "fulfilled") {
@@ -92,30 +94,19 @@ export class MyPromise {
     return thenPromise;
   }
 
-  static all(...args: any[]) {
+  static all(promises: MyPromise[]) {
     return new MyPromise((resolve, reject) => {
-      let res = [];
-      args.map((p, index) => {
-        console.log("🚀 ~ file: base-promise.ts:108 ~ MyPromise ~ args.map ~ p:", p.then);
-        try {
-          const result = p.then((data: any) => {
+      let res: unknown[] = [],
+        count = 0;
+      promises.forEach((p, index) => {
+        p.then(
+          (data) => {
             res[index] = data;
-            if (res.length === args.length) resolve(result);
-          });
-        } catch (e) {
-          reject(e);
-        }
+            if (++count === promises.length) resolve(res);
+          },
+          (err) => reject(err)
+        );
       });
     });
   }
 }
-function fn(index: number, time: number) {
-  return new MyPromise((resolve) => {
-    setTimeout(resolve(index), time);
-  });
-}
-async function myTest() {
-  const res = await MyPromise.all([fn(1, 2000) as MyPromise, fn(2, 1000) as MyPromise]);
-  console.log(res);
-}
-myTest();
