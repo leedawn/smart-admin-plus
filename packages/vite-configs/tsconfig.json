@@ -1,0 +1,6 @@
+{
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "skipLibCheck": true  // 不设置这个就会检查库文件
+  }
+}

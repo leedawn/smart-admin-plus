@@ -6,20 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-  <body>
-    <canvas id="canvas" width="200" height="200"></canvas>
+  <body onload="draw()">
+    <canvas id="canvas" width="600" height="600">test</canvas>
 
     <script>
-      const canvas = document.getElementById("canvas");
-      const ctx = canvas.getContext("2d");
+      function draw() {
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
 
-      ctx.fillStyle = "rgb(200,0,0)";
-      ctx.fillRect(10, 10, 55, 50);
+        ctx.beginPath();
+        ctx.moveTo(320, 162);
+        ctx.bezierCurveTo(306, 103, 210, 64, 166, 135); // 第1根线
+        ctx.moveTo(474, 135);
+        ctx.bezierCurveTo(430, 64, 334, 103, 320, 162); // 第6根线
+        ctx.stroke();
 
-      ctx.fillStyle = "rgb(0,0,200,0.5)";
-      ctx.fillRect(30, 30, 55, 50);
+        // ctx.fillStyle = "rgb(200,0,0)";
+        // ctx.fillRect(10, 10, 55, 50);
 
-      ctx.strokeText("hello world", 10, 50);
+        // ctx.fillStyle = "rgb(0,0,200,0.5)";
+        // ctx.fillRect(30, 30, 55, 50);
+
+        // ctx.strokeText("hello world", 10, 50);
+      }
     </script>
   </body>
 </html>
