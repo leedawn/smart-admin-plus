@@ -17,6 +17,7 @@ function reducer(state: Info, action: { type: string } & Partial<Info>): Info {
 
 export default function Test() {
   const [state, dispatch] = useReducer(reducer, { name: 'leon', age: 23 });
+  let count = 0;
 
   function changeName(newValue: string) {
     dispatch({ type: 'changeName', name: newValue });
@@ -26,12 +27,18 @@ export default function Test() {
     dispatch({ type: 'addAge' });
   }
 
+  function onClick() {
+    count++;
+  }
+
   return (
     <div>
       <input value={state.name} onChange={(e) => changeName(e.target.value)} />
       <button onClick={addAge}>add</button>
       {state.name}
       {state.age}
+      <button onClick={onClick}>click</button>
+      {count}
     </div>
   );
 }

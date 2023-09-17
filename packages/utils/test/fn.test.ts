@@ -1,5 +1,5 @@
 import { delay } from "../src/async";
-import { compose, debounce, throttle } from "../src/fn";
+import { compose, debounce, pipe, throttle } from "../src/fn";
 
 test("debounce", async () => {
   const fn = jest.fn();
@@ -32,4 +32,15 @@ test("compose", () => {
   expect(a(4)).toEqual(7);
   const b = compose();
   expect(b(1)).toEqual(1);
+});
+
+test("pipe", () => {
+  function fn1(x: number) {
+    return x / 4;
+  }
+  function fn2(x: number) {
+    return x + 2;
+  }
+  const a = pipe(fn1, fn2);
+  expect(a(4)).toEqual(3);
 });

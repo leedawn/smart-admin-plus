@@ -4,7 +4,8 @@ import VirtualList from './components/useVirtualList/demo';
 import Unmount from './components/useUnmount/demo';
 import EventListener from './components/useEventListener/demo';
 import Test from './components/test';
-import ReduxDemo from './components/redux';
+// import ReduxDemo from './components/redux';
+import { TwoEffects } from './components/useEffectAndUseLayoutEffect/demo';
 
 export const router = createBrowserRouter([
   {
@@ -27,9 +28,13 @@ export const router = createBrowserRouter([
     path: '/event-listener',
     element: <EventListener />
   },
+  //   {
+  //     path: '/redux',
+  //     element: <ReduxDemo />
+  //   }
   {
-    path: '/redux',
-    element: <ReduxDemo />
+    path: '/two-effects',
+    element: <TwoEffects />
   }
 ]);
 
@@ -50,6 +55,9 @@ export function NavigationBar() {
       </a>
       <a href={'/event-listener'} style={{ paddingRight: '20px' }}>
         event-listener
+      </a>
+      <a href={'/two-effects'} style={{ paddingRight: '20px' }}>
+        two-effects
       </a>
       <a href={'/unmount'}>useUnmount</a>
     </div>

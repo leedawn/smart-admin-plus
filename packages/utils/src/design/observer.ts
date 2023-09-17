@@ -55,3 +55,18 @@ export class ConcreteObserverB implements Observer {
     }
   }
 }
+
+// proxy 实现观察者模式
+type ObserveCb = () => void;
+
+export const observable = (obj: object) => new Proxy(obj, { set });
+
+const observeQueue: Set<ObserveCb> = new Set();
+
+export const observe = (fn: ObserveCb) => observeQueue.add(fn);
+
+function set(target: object, key: any, value: any, receiver: object) {
+  const res = Reflect.set(target, key, value, receiver);
+  observeQueue.forEach((fn) => fn());
+  return res;
+}

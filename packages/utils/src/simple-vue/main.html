@@ -1,0 +1,92 @@
+<div id="app"></div>
+<script>
+  function reactive(data) {
+    return new Proxy(data, {
+      get(target, key, receiver) {
+        track(target, key);
+        return Reflect.get(target, key, receiver);
+      },
+      set(target, key, newVal, receiver) {
+        Reflect.set(target, key, newVal, receiver);
+        trigger(target, key);
+        return true;
+      },
+    });
+  }
+
+  let activeEffect;
+  let targetMap = new WeakMap();
+
+  function track(target, key) {
+    let keyMap = targetMap.get(target);
+    if (!keyMap) targetMap.set(target, (keyMap = new Map()));
+    let depMap = keyMap.get(key);
+    if (!depMap) keyMap.set(key, (depMap = new Set()));
+    if (activeEffect) depMap.add(activeEffect);
+  }
+
+  function trigger(target, key) {
+    const effects = targetMap.get(target)?.get(key);
+    if (effects && effects.size) effects.forEach((effect) => effect());
+  }
+
+  function effect(cb, options = {}) {
+    const __effect = function (...args) {
+      activeEffect = __effect;
+      return cb(...args);
+    };
+    if (!options.lazy) __effect();
+    return __effect;
+  }
+
+  function ref(data) {
+    let val = data;
+    let obj = {
+      get value() {
+        track(obj, "value");
+        return val;
+      },
+      set value(newVal) {
+        if (newVal === val) return;
+        trigger(obj, "value");
+        val = newVal;
+      },
+    };
+    return obj;
+  }
+
+  function mount(instance, el) {
+    effect(function () {
+      instance.$data && update(instance, el);
+    });
+    instance.$data = instance.setup();
+    update(instance, el);
+  }
+
+  function update(instance, el) {
+    el.innerHTML = instance.render();
+  }
+
+  const App = {
+    $data: null,
+    setup() {
+      let time = reactive({ second: 1 });
+      let refTime = ref(1);
+      setInterval(() => {
+        time.second++;
+      }, 1000);
+      setInterval(() => {
+        refTime.value++;
+      }, 2000);
+      return { time, refTime };
+    },
+    render() {
+      return `
+            <div>${this.$data.time.second}</div>
+            <div>${this.$data.refTime.value}</div>
+            `;
+    },
+  };
+
+  mount(App, document.getElementById("app"));
+</script>

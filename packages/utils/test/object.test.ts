@@ -1,4 +1,5 @@
-import { deepClone } from "../src/object";
+import { deepClone, myInstanceOf } from "../src/object";
+import { objectFactory } from "../src";
 
 test("deepClone", () => {
   let obj: any = {};
@@ -10,4 +11,21 @@ test("deepClone", () => {
   // @ts-ignore
   obj.info[1].age = 77;
   expect(res).toEqual({ name: "leon", info: [2, { age: 23, another: { foo: {} } }] });
+});
+
+test("objectFactory", () => {
+  function Fn() {}
+  Fn.prototype.print = function () {
+    return this.name;
+  };
+
+  const obj = objectFactory(Fn, 23);
+  const name = "leon";
+  obj.name = name;
+  expect(obj.print()).toEqual(name);
+});
+
+test("instanceof", () => {
+  expect(myInstanceOf([], Array)).toBe(true);
+  expect(myInstanceOf({}, Array)).toBe(false);
 });

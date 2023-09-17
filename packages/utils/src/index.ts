@@ -1,0 +1,1 @@
+export { objectFactory } from "./object";

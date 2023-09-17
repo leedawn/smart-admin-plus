@@ -1,0 +1,29 @@
+<script>
+  function ajax(options) {
+    let { url, method, data, success, error } = options || {};
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    xhr.send(JSON.stringify(data));
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
+        if (xhr.status >= 200 && xhr.status <= 300) {
+          success(xhr.responseText);
+        } else {
+          error(xhr.responseText);
+        }
+      }
+    };
+  }
+
+  ajax({
+    url: "https://static.xx.fbcdn.net/rsrc.php/v3iEpO4/yM/l/en_US/b3wp7GyoWXZ.js?_nc_x=Ij3Wp8lg5Kz",
+    method: "get",
+    data: {},
+    success: (data) => {
+      console.log(data);
+    },
+    error: (err) => {
+      console.log(err);
+    },
+  });
+</script>

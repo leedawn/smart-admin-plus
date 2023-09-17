@@ -1,0 +1,152 @@
+<div id="app"></div>
+
+<script>
+  const isObject = (val) => typeof val === "object" && val !== null;
+  // reactive
+  function reactive(data) {
+    if (!isObject(data)) return;
+    return new Proxy(data, {
+      get(target, key, receiver) {
+        //反射api
+        const ret = Reflect.get(target, key, receiver);
+        //收集依赖
+        track(target, key);
+        return isObject(ret) ? reactive(ret) : ret;
+      },
+      set(target, key, val, receiver) {
+        Reflect.set(target, key, val, receiver);
+        //触发依赖方法
+        trigger(target, key);
+        return true;
+      },
+      deleteProperty(target, key, receiver) {
+        const ret = Reflect.deleteProperty(target, key, receiver);
+        trigger(target, key);
+        return ret;
+      },
+    });
+  }
+
+  // track
+  //全局变量表示依赖
+  let activeEffect;
+  //存储依赖的数据结构
+  let targetMap = new WeakMap();
+  //每一个依赖又是一个map结构，每一个map存储一个副作用函数即effect函数
+  function track(target, key) {
+    //拿到依赖
+    let depsMap = targetMap.get(target);
+    // 如果依赖不存在则初始化
+    if (!depsMap) targetMap.set(target, (depsMap = new Map()));
+    //拿到具体的依赖，是一个set结构
+    let dep = depsMap.get(key);
+    if (!dep) depsMap.set(key, (dep = new Set()));
+    //如果没有依赖，则存储再set数据结构中
+    if (!dep.has(activeEffect)) dep.add(activeEffect);
+  }
+
+  // trigger
+  function trigger(target, key) {
+    const depsMap = targetMap.get(target);
+    //存储依赖的数据结构都拿不到，则代表没有依赖，直接返回
+    if (!depsMap) return;
+    depsMap.get(key).forEach((effect) => effect && effect());
+  }
+
+  //   effect
+  function effect(handler, options = {}) {
+    const __effect = function (...args) {
+      activeEffect = __effect;
+      return handler(...args);
+    };
+    //配置对象有一个lazy属性，用于computed计算属性的实现，因为计算属性是懒加载的，也就是延迟执行
+    //也就是说如果不是一个计算属性的回调函数，则立即执行副作用函数
+    if (!options.lazy) {
+      __effect();
+    }
+    return __effect;
+  }
+
+  const count = ref(0);
+  //修改
+  count.value = 1;
+
+  function ref(target) {
+    let value = target;
+    const obj = {
+      get value() {
+        //收集依赖
+        track(obj, "value");
+        return value;
+      },
+      set value(newValue) {
+        if (value === newValue) return;
+        value = newValue;
+        //触发依赖
+        trigger(obj, "value");
+      },
+    };
+    return obj;
+  }
+
+  //   computed
+  function computed(handler) {
+    // 只考虑函数的情况
+    // 延迟计算 const c = computed(() => `${ count.value}!`)
+    let _computed;
+    //可以看到computed就是一个添加了lazy为true的配置对象的副作用函数
+    const run = effect(handler, { lazy: true });
+    _computed = {
+      //get 访问器
+      get value() {
+        return run();
+      },
+    };
+    return _computed;
+  }
+
+  //     mount
+  function mount(instance, el) {
+    effect(function () {
+      instance.$data && update(instance, el);
+    });
+    //setup返回的数据就是实例上的数据
+    instance.$data = instance.setup();
+    //这里的update实际上就是编译函数
+    update(instance, el);
+  }
+
+  //这是最简单的编译函数
+  function update(instance, el) {
+    el.innerHTML = instance.render();
+  }
+
+  const App = {
+    $data: null,
+    setup() {
+      let count = ref(0);
+      let time = reactive({ second: 0 });
+      let com = computed(() => `${count.value + time.second}`);
+      setInterval(() => {
+        time.second++;
+      }, 1000);
+      setInterval(() => {
+        count.value++;
+      }, 2000);
+      return {
+        count,
+        time,
+        com,
+      };
+    },
+    render() {
+      return `
+            <h1>How reactive?</h1>
+            <p>this is reactive work:${this.$data.time.second}</p>
+            <p>this is ref work:${this.$data.count.value}</p>
+            <p>this is computed work:${this.$data.com.value}</p>
+        `;
+    },
+  };
+  mount(App, document.querySelector("#app"));
+</script>

@@ -3,7 +3,7 @@ import { SimpleCommand, ComplexCommand, Receiver, Invoker } from "../src/design/
 import { ConcreteComponent, ConcreteVisitor } from "../src/design/visitor";
 import { Context, ConcreteStrategyA, ConcreteStrategyB } from "../src/design/strategy";
 import { ConcreteStateA, StateContext } from "../src/design/state";
-import { ConcreteSubject, ConcreteObserverA, ConcreteObserverB } from "../src/design/observer";
+import { ConcreteSubject, ConcreteObserverA, ConcreteObserverB, observable, observe } from "../src/design/observer";
 import { ConcreteClass } from "../src/design/template";
 import { Caretaker, Originator } from "../src/design/memento";
 import { ComponentA, ComponentB, ConcreteMediator } from "../src/design/mediator";
@@ -72,6 +72,15 @@ describe("behavior pattern", () => {
     expect(concreteSubject.notify()).toEqual("concreteObserverA");
     concreteSubject.detach(concreteObserverA);
     expect(concreteSubject.notify()).toEqual("concreteObserverB");
+  });
+
+  test("observable", () => {
+    const proxy = observable({ name: "lee" });
+    const fn = jest.fn();
+    observe(fn);
+    // @ts-ignore
+    proxy.name = "leon";
+    expect(fn).toHaveBeenCalledTimes(1);
   });
 
   test("template", () => {
