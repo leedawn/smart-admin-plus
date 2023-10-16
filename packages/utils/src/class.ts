@@ -8,10 +8,10 @@ export class EventEmitter {
   }
 
   on(type: string, callback: Function) {
-    if (!this.events.has(type)) {
-      this.events.set(type, new Set());
+    let set = this.events.get(type);
+    if (!set) {
+      this.events.set(type, (set = new Set()));
     }
-    const set = this.events.get(type);
     set!.add(callback);
   }
   emit(type: string, ...args: unknown[]) {

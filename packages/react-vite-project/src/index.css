@@ -18,6 +18,14 @@ button {
     margin-left: 20px;
 }
 
+.bar {
+    height: 100px;
+}
+
+.dark {
+    background-color: red;
+}
+
 /* @tailwind base;
 @tailwind components;
 @tailwind utilities; */

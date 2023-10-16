@@ -1,4 +1,4 @@
-import { EventEmitter } from "src/class";
+import { EventEmitter } from "../src/class";
 
 test("eventEmitter", () => {
   const fn = jest.fn();

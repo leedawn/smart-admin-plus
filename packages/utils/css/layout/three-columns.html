@@ -1,0 +1,53 @@
+<style>
+  div {
+    height: 200px;
+  }
+  .aside {
+    background-color: blue;
+  }
+  .main {
+    background-color: red;
+  }
+
+  /* 1. flex 布局 */
+  /*   .layout {
+    display: flex;
+  }
+  .aside {
+    width: 100px;
+  }
+  .main {
+    flex: 1;
+  } */
+
+  /* 2. grid 布局 */
+  /*   .layout {
+    display: grid;
+    grid-template-columns: 100px auto 100px;
+  } */
+
+  /* 3. absolute+margin  */
+  .aside {
+    position: absolute;
+    top: 0;
+    width: 100px;
+  }
+  .left {
+    left: 0;
+  }
+  .right {
+    right: 0;
+  }
+
+  .layout {
+    position: relative;
+  }
+  .main {
+    margin: 0 100px;
+  }
+</style>
+<div class="layout">
+  <div class="aside left"></div>
+  <div class="main"></div>
+  <div class="aside right"></div>
+</div>

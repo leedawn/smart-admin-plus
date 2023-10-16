@@ -1,0 +1,48 @@
+<body>
+  <div id="parent">
+    <div id="test">test</div>
+  </div>
+</body>
+<script>
+  const node = document.getElementById("test");
+  const parent = document.getElementById("parent");
+  node.addEventListener(
+    "click",
+    (event) => {
+        event.stopPropagation();
+      console.log("冒泡11");
+    },
+    false
+  );
+  node.addEventListener(
+    "click",
+    (event) => {
+        // event.stopImmediatePropagation();
+      console.log("冒泡12");
+    },
+    false
+  );
+  node.addEventListener(
+    "click",
+    (event) => {
+  
+      console.log("捕获 ");
+    },
+    true
+  );
+  parent.addEventListener(
+    "click",
+    (event) => {
+      console.log("冒泡0");
+    },
+    false
+  );
+  parent.addEventListener(
+    "click",
+    (event) => {
+      console.log("捕获0");
+    //   event.stopPropagation()
+    },
+    true
+  );
+</script>

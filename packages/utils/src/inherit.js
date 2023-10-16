@@ -1,4 +1,4 @@
-/* function Parent() {
+function Parent() {
   this.name = "parent";
 }
 Parent.prototype.getName = function () {
@@ -21,21 +21,3 @@ const person = new Child();
 // @ts-ignore
 console.log(person.getName());
 console.log(person.getOperation());
- */
-
-class Person {
-  constructor(name) {
-    this.name = name;
-  }
-  getName() {
-    return this.name;
-  }
-}
-class Child extends Person {
-  constructor(name, age) {
-    super(name);
-    this.age = age;
-  }
-}
-const p = new Child("leon", 33);
-console.log(p.getName());

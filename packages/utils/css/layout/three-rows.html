@@ -1,0 +1,50 @@
+<style>
+  .aside {
+    width: 100%;
+    height: 100px;
+    background-color: blue;
+  }
+  .main {
+    width: 100%;
+    background-color: red;
+  }
+  .layout {
+    height: 100%;
+  }
+
+  /* 1. flex 布局 */
+  /*  .layout {
+    display: flex;
+    flex-direction: column;
+  }
+  .main {
+    flex: 1;
+  } */
+
+  /* 2. grid 布局 */
+  /*   .layout {
+    display: grid;
+    grid-template-rows: 100px auto 100px;
+  } */
+
+  /* 3. absolute+margin  */
+  /*  .layout {
+    position: relative;
+  }
+  .top {
+    position: absolute;
+    top: 0;
+  }
+  .bottom {
+    position: absolute;
+    bottom: 0;
+  }
+  .main {
+    height: 100%;
+  } */
+</style>
+<div class="layout">
+  <div class="top aside">1</div>
+  <div class="main">2</div>
+  <div class="bottom aside">3</div>
+</div>

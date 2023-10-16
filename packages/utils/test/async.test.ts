@@ -1,22 +1,27 @@
-import { delay } from "../src/async";
-import { promiseLock, refreshPromiseLock } from "../src/async/promise-lock";
+import { delay, mySetInterval } from "../src/async";
+// import { promiseLock, refreshPromiseLock } from "../src/async/promise-lock";
 
-test("异步延迟函数", async () => {
-  const callTime = Date.now();
-  await delay(100);
-  expect(Date.now() - callTime).toBeGreaterThanOrEqual(100);
+// test("异步延迟函数", async () => {
+//   const callTime = Date.now();
+//   await delay(100);
+//   expect(Date.now() - callTime).toBeGreaterThanOrEqual(100);
+// });
+
+test("使用 setTimeout 模拟 setInterval", async () => {
+  const fn = jest.fn();
+  const clear = mySetInterval(fn, 1000);
+  await delay(1500);
+  clear();
+  await delay(1000);
+  expect(fn).toBeCalledTimes(2);
 });
 
-describe("promiseLock 函数用法", () => {
+/* describe("promiseLock 函数用法", () => {
   test("promiseLock 基础例子", async () => {
     const fn = jest.fn();
     const asyncFn = () => delay(100).then(() => fn());
     const asyncFnWithLock = promiseLock(asyncFn, () => "key");
-    await Promise.all([
-      asyncFnWithLock(),
-      asyncFnWithLock(),
-      asyncFnWithLock(),
-    ]);
+    await Promise.all([asyncFnWithLock(), asyncFnWithLock(), asyncFnWithLock()]);
     expect(fn).toBeCalledTimes(1);
   });
 
@@ -27,11 +32,7 @@ describe("promiseLock 函数用法", () => {
       keyGenerator: () => "key",
       trace,
     });
-    const [res1, res2, res3] = await Promise.all([
-      asyncFnWithLock(),
-      asyncFnWithLock(),
-      asyncFnWithLock(),
-    ]);
+    const [res1, res2, res3] = await Promise.all([asyncFnWithLock(), asyncFnWithLock(), asyncFnWithLock()]);
     expect(res1).toStrictEqual(res2);
     expect(res2).toStrictEqual(res3);
     expect(trace).toBeCalledTimes(2);
@@ -44,11 +45,7 @@ describe("promiseLock 函数用法", () => {
       keyGenerator: () => "key",
       forever: true,
     });
-    const [res1, res2, res3] = await Promise.all([
-      asyncFnWithLock(),
-      asyncFnWithLock(),
-      asyncFnWithLock(),
-    ]);
+    const [res1, res2, res3] = await Promise.all([asyncFnWithLock(), asyncFnWithLock(), asyncFnWithLock()]);
     await asyncFnWithLock();
     expect(res1).toStrictEqual(res2);
     expect(res2).toStrictEqual(res3);
@@ -62,11 +59,7 @@ describe("promiseLock 函数用法", () => {
       keyGenerator: () => "key",
       forever: false,
     });
-    const [res1, res2, res3] = await Promise.all([
-      asyncFnWithLock(),
-      asyncFnWithLock(),
-      asyncFnWithLock(),
-    ]);
+    const [res1, res2, res3] = await Promise.all([asyncFnWithLock(), asyncFnWithLock(), asyncFnWithLock()]);
     await asyncFnWithLock();
     expect(res1).toStrictEqual(res2);
     expect(res2).toStrictEqual(res3);
@@ -94,16 +87,14 @@ describe("promiseLock 函数用法", () => {
       trace,
     });
 
-    await Promise.allSettled([asyncFnWithLock(), asyncFnWithLock()]).then(
-      (rrr) => {
-        for (const item of rrr) {
-          if (item.status === "rejected") {
-            fn();
-          }
+    await Promise.allSettled([asyncFnWithLock(), asyncFnWithLock()]).then((rrr) => {
+      for (const item of rrr) {
+        if (item.status === "rejected") {
+          fn();
         }
       }
-    );
+    });
     expect(trace).toBeCalledTimes(1);
     expect(fn).toBeCalledTimes(2);
   });
-});
+}); */

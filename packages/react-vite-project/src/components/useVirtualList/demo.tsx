@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import useVirtualList from '.';
 import useEventListener from '../useEventListener';
+import classes from './test.module.css';
 
 function App() {
   const containerRef = useRef(null);
@@ -49,6 +50,7 @@ function App() {
             return (
               <div
                 key={index}
+                className={classes.redColor}
                 style={{
                   height: '30px',
                   borderTop: '1px solid #eee',
