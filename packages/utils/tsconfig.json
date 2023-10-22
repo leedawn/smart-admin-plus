@@ -15,5 +15,5 @@
     "target": "ES5",
     "lib": ["DOM", "ESNext"],
   },
-  "include": ["src/**/*", "test/**/*"]
+  "include": ["src/**/*", "test/**/*", "dom/simple-web-worker/cross-origin"]
 }

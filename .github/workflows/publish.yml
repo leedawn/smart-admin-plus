@@ -18,7 +18,7 @@ jobs:
         with:
           version: 6.31.0
       - name: Install modules
-        run: pnpm install
+        run: cd packages/smart-ui-vite && pnpm install
       - name: Build
         run: cd packages/smart-ui-vite && npm run build
       - name: "Publish to the npm registry"

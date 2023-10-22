@@ -52,7 +52,7 @@ export function treeToList(list: Content[]) {
         dfs(l.children);
         delete l.children;
       }
-      res.unshift(l);
+      res.unshift(l);  // 不能保证顺序
     });
   }
   dfs(list);

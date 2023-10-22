@@ -18,7 +18,7 @@ jobs:
         with:
           version: 7.2.1
       - name: Install modules
-        run: pnpm install
+        run: cd packages/smart-ui-vite && pnpm install
       - name: Run Test Coverage
         run: cd packages/smart-ui-vite && pnpm coverage
       - name: Upload coverage to Codecov

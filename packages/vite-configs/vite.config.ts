@@ -5,6 +5,7 @@ import vue from "@vitejs/plugin-vue";
 import { visualizer } from "rollup-plugin-visualizer";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer"; // 使用失败，没有效果
 // import viteCDNPlugin from "vite-plugin-cdn-import";
+import viteCompression from 'vite-plugin-compression'
 
 export default defineConfig({
   base: "", // 配置公共基础路径
@@ -15,15 +16,18 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
+          console.log("🚀 ~ file: vite.config.ts:19 ~ id:", id)
           if (id.includes("node_modules")) {
             return "vender";
           }
         },
       },
     },
+    reportCompressedSize: false,
   },
 
   plugins: [
+    viteCompression(),   // 不确定这个插件是否能够压缩
     ViteImageOptimizer({ jpeg: { quality: 10 } }),
     checker({ typescript: true }),
     vue(),

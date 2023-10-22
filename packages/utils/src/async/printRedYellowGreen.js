@@ -1,56 +1,58 @@
-// 1. 打印红黄绿
-// function red() {
-//   console.log("red");
-// }
-// function green() {
-//   console.log("green");
-// }
-// function yellow() {
-//   console.log("yellow");
-// }
-// /* function task(type, time, callback) {
-//   setTimeout(() => {
-//     if (type === "red") red();
-//     else if (type === "green") green();
-//     else if (type === "yellow") yellow();
-//     callback();
-//   }, time);
-// }
+// 循环打印红黄绿
+// 1. 回调函数版本
+/* function print(type, time, callback) {
+  setTimeout(() => {
+    console.log(type);
+    callback();
+  }, time);
+}
+function run() {
+  print("red", 3000, () => {
+    print("green", 1000, () => {
+      print("blue", 2000, () => {
+        run();
+      });
+    });
+  });
+}
+run(); */
 
-// function step() {
-//   task("red", 3000, () => {
-//     task("green", 1000, () => {
-//       task("yellow", 2000, step);
-//     });
-//   });
-// }
-// step(); */
+// 2. promise 版本
+/* function sleep(time) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
+}
+function print(type, time) {
+  return new Promise((resolve) => {
+    sleep(time).then(() => {
+      console.log(type);
+      resolve("");
+    });
+  });
+}
+function run() {
+  print("red", 3000)
+    .then(() => print("green", 1000))
+    .then(() => print("blue", 2000))
+    .then(run);
+}
+run(); */
 
-// function promiseTask(type, time) {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       if (type === "red") red();
-//       if (type === "green") green();
-//       if (type === "yellow") yellow();
-//       // @ts-ignore
-//       resolve();
-//     }, time);
-//   });
-// }
-// function promiseStep() {
-//   promiseTask("red", 3000)
-//     .then(() => promiseTask("green", 1000))
-//     .then(() => promiseTask("yellow", 2000))
-//     .then(() => {
-//       promiseStep();
-//     });
-// }
-// // promiseStep();
-
-// async function asyncStep() {
-//   await promiseTask("red", 3000);
-//   await promiseTask("green", 1000);
-//   await promiseTask("yellow", 2000);
-//   asyncStep();
-// }
-// asyncStep();
+// 3. async...await
+function sleep(time) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
+}
+async function print(type, time) {
+  await sleep(time);
+  console.log(type);
+}
+async function run() {
+  await print("red", 3000);
+  await print("green", 1000);
+  await print("blue", 2000);
+  run();
+}
+run();

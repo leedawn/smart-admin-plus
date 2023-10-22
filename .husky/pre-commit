@@ -1,6 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-cd packages/smart-ui-vite && pnpm run lint
-
-# cd ../vite-project && npx --no -- lint-staged
+cd packages/smart-ui-vite && pnpm lint
