@@ -10,6 +10,7 @@ export const useCounterStore = defineStore({
     },
     getters: {
       double: (state) => {
+        console.log("🚀 ~ file: counter.ts:13 ~ state:", state)
         return state.num * 2;
       },
     },

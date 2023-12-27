@@ -11,7 +11,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "nuxt": "^3.7.3"
+  "dependencies": {
+    "nuxt": "2"
   }
 }

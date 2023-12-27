@@ -9,6 +9,7 @@ import { TwoEffects } from './components/useEffectAndUseLayoutEffect/demo';
 import { ReducerDemo } from './components/reducer/demo';
 import { createElement } from 'react';
 import { UseContextDemo } from './components/useContext/demo';
+import TestCache from './components/cache';
 
 // TODO: 尝试将下面的内容参数化失败
 // const paths = ['/virtual-list'];
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
       {
         path: '/reducer-demo',
         element: <ReducerDemo />
+      },
+      {
+        path: '/cache',
+        element: <TestCache />
       }
       //   { path: '/context-demo', element: <UseContextDemo /> }
     ]

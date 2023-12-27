@@ -1,33 +1,17 @@
-<link rel="stylesheet" href="./test.css" />
-<body>
-  <div>body</div>
-  <img id="img" src="https://en.js.cx/clipart/train.gif?speed=1&cache=0" />
-</body>
+<div id="app">
+
+</div>
 <script>
-  function ready() {
-    console.log("DOMContent");
-    const img = document.getElementById("img");
-    console.log(img, img.offsetHeight, img.offsetWidth);
-  }
-  document.addEventListener("DOMContentLoaded", ready);
+  // Create WebSocket connection.
+  const socket = new WebSocket("ws://localhost:8080");
+
+  // Connection opened
+  socket.addEventListener("open", function (event) {
+    socket.send("Hello Server!");
+  });
+
+  // Listen for messages
+  socket.addEventListener("message", function (event) {
+    console.log("Message from server ", event.data);
+  });
 </script>
-<script defer>
-  console.log("library load");
-</script>
-
-<!-- <script>
-
-  console.log("initial readyState:" + document.readyState);
-
-  document.addEventListener("readystatechange", () => console.log("readyState:" + document.readyState));
-  document.addEventListener("DOMContentLoaded", () => console.log("DOMContentLoaded"));
-
-  window.onload = () => console.log("window onload");
-</script>
-
-<iframe src="iframe.html" onload="console.log('iframe onload')"></iframe>
-
-<img src="http://en.js.cx/clipart/train.gif" id="img" />
-<script>
-  img.onload = () => console.log("img onload");
-</script> -->

@@ -11,6 +11,7 @@ app.use(function (req, res, next) {
 //    res.setHeader("Access-Control-Allow-Origin", "null");
 //     // 允许携带哪个头访问我
 //     res.setHeader("Access-Control-Allow-Headers", "name");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     // 允许哪个方法访问我
     res.setHeader("Access-Control-Allow-Methods", "PUT");
     // 允许携带cookie

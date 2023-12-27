@@ -1,11 +1,16 @@
-onmessage = function (e) {
-  console.log("Worker: Message received from main script", e.data);
-  const result = e.data[0] * e.data[1];
-//   if (isNaN(result)) {
-//     postMessage("Please write two numbers");
-//   } else {
-//     const workerResult = "Result: " + result;
-//     console.log("Worker: Posting message back to main script");
-//     postMessage(workerResult);
-//   }
+function calc(num) {
+  let result = 0;
+  let startTime = performance.now();
+  // 计算求和（模拟复杂计算）
+  for (let i = 0; i <= num; i++) {
+    result += i;
+  }
+  // 由于是同步计算，在没计算完成之前下面的代码都无法执行
+  const time = performance.now() - startTime;
+  console.log("总计算花费时间:", time);
+  self.postMessage(result);
+}
+
+self.onmessage = function (e) {
+  calc(e.data);
 };

@@ -1,5 +1,5 @@
-import { deepClone, myInstanceOf } from "../src/object";
-import { objectFactory } from "../src";
+import { deepClone } from "../src/object";
+import { objectFactory, myInstanceOf } from "../src";
 
 test("deepClone", () => {
   let obj: any = {};
@@ -23,6 +23,21 @@ test("objectFactory", () => {
   const name = "leon";
   obj.name = name;
   expect(obj.print()).toEqual(name);
+});
+
+test("objectFactory2", () => {
+  const wow = "wow";
+  function Fn() {
+    return {
+      name: wow,
+    };
+  }
+  Fn.prototype.print = function () {
+    return this.name;
+  };
+
+  const obj = objectFactory(Fn, 23);
+  expect(obj.name).toEqual(wow);
 });
 
 test("instanceof", () => {

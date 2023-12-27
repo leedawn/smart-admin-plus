@@ -56,7 +56,7 @@ function normalizePromiseConcatOptions(options: any) {
   return typeof options === "number" ? { duration: options } : options;
 }
 
-export default function promiseConcat(fn: any, options: any) {
+export function promiseConcat(fn: any, options?: any) {
   if (fn && typeof fn === "function") {
     return createPromiseConcatFunction(
       fn,

@@ -4,6 +4,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+
     "experimentalDecorators": true,
     "importHelpers": true,
     "esModuleInterop": true,
@@ -12,8 +13,9 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "allowSyntheticDefaultImports": true,
-    "target": "ES5",
+    "target": "ES2015",
     "lib": ["DOM", "ESNext"],
+    "skipLibCheck": true
   },
   "include": ["src/**/*", "test/**/*", "dom/simple-web-worker/cross-origin"]
 }

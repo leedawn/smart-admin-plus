@@ -88,3 +88,18 @@ const obj = {
 const fn = test.bind(obj, 3);
 //@ts-ignore
 new fn(4);
+
+/**
+ * @name 柯里化函数。把一个接收多参的函数转变成可以多次接受参数的函数
+ */
+export function curry(fn: Function) {
+  return function curriedFn(this: any, ...args: any[]) {
+    if (args.length >= fn.length) {
+      return fn.apply(this, args);
+    } else {
+      return function (this: any, ...args2: any[]) {
+        return curriedFn.apply(this, args.concat(args2));
+      };
+    }
+  };
+}

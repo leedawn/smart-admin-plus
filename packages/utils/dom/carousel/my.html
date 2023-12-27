@@ -1,0 +1,75 @@
+<style>
+  .carousel-container {
+    width: 600px;
+    overflow: hidden;
+    height: 700px;
+    position: relative;
+    margin: auto;
+  }
+  .carousel {
+    display: flex;
+    transition: transform 0.8s ease;
+  }
+  .carousel-item {
+    min-width: 100%;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    background-color: #fff;
+    color: #333;
+    border: none;
+  }
+  .prev {
+    left: 10px;
+  }
+  .next {
+    right: 10px;
+  }
+</style>
+
+<body>
+  <div class="carousel-container">
+    <div class="carousel">
+      <div class="carousel-item"><img src="./1.jpeg" alt="11" /></div>
+      <div class="carousel-item"><img src="./1.webp" alt="1" /></div>
+      <div class="carousel-item"><img src="./2.webp" alt="2" /></div>
+      <div class="carousel-item"><img src="./3.webp" alt="3" /></div>
+    </div>
+    <button class="prev" onclick="prevSlide()"><</button>
+    <button class="next" onclick="nextSlide()">></button>
+  </div>
+
+  <script>
+    const wrapper = document.querySelector(".carousel");
+    const itemNums = document.querySelectorAll(".carousel-item").length;
+    let currentIndex = 0;
+
+    function slide(targetIndex) {
+      if (targetIndex >= itemNums) {
+        currentIndex = 0;
+      } else if (targetIndex < 0) {
+        currentIndex = itemNums - 1;
+      } else {
+        currentIndex = targetIndex;
+      }
+      wrapper.style.transform = `translateX(-${currentIndex * 100 + "%"} )`;
+    }
+
+    function prevSlide() {
+      slide(currentIndex - 1);
+    }
+
+    function nextSlide() {
+      slide(currentIndex + 1);
+    }
+  </script>
+</body>

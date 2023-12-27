@@ -1,0 +1,30 @@
+<head>
+  <style>
+    #image {
+      width: 212px;
+      height: 212px;
+      background-image: url(./block.png);
+      background-size: 100%;
+      animation: run 2s 0 steps(24) infinite forwards;
+      animation-play-state: paused;
+    }
+    #image:hover {
+      animation-play-state: running;
+    }
+    @keyframes run {
+      0% {
+        background-position: 0 0;
+      }
+      50% {
+        background-position: 0 -5078px;
+      }
+      100% {
+        background-position: 0 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="image"></div>
+</body>
+

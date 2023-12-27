@@ -1,0 +1,21 @@
+<div>计算从 1 到给定数值的总和</div>
+<input type="text" placeholder="请输入数字" id="num" />
+<button onclick="calc()">开始计算</button>
+<span>计算结果为：<span id="result">-</span></span>
+
+<div>在计算期间你可以填XX表单</div>
+<input type="text" placeholder="请输入姓名" />
+<input type="text" placeholder="请输入年龄" />
+
+<script>
+  const worker = new Worker("./worker.js");
+
+  function calc() {
+    const num = parseInt(document.getElementById("num").value);
+    worker.postMessage(num);
+  }
+
+  worker.onmessage = function (e) {
+    document.getElementById("result").innerHTML = e.data;
+  };
+</script>

@@ -18,6 +18,19 @@
 //   completed: false,
 // };
 
+interface Todo {
+  name: string;
+  age: number;
+}
+type MyPick<T extends object,K extends keyof T>={
+   [key in K]:T[K]
+}
+type TodoMyName = MyPick<Todo, "age">;
+const res: TodoMyName = {
+  age: 23,
+//   name: "we",
+};
+
 /**
  * @description 2. readonly
  *
@@ -149,7 +162,7 @@ type FunctionParamsType = MyParameters<typeof foo>; // [arg1: string, arg2: numb
 /**
  * @description 201. ReturnType
  */
-const fn = (v: boolean): number => {
+/* const fn = (v: boolean): number => {
   if (v) return 1;
   else return 2;
 };
@@ -157,9 +170,9 @@ const helloFn = () => "hello";
 
 type MyReturnType<T extends Function> = T extends (...args: unknown[]) => infer R ? R : never;
 
-type a = MyReturnType<typeof fn>; // should be "1 | 2" */
+type a = MyReturnType<typeof fn>; // should be "1 | 2" 
 type b = MyReturnType<typeof helloFn>;
-
+ */
 /**
  * @description 202 omit
  */
@@ -204,11 +217,11 @@ todo.completed = true; // OK */
 /**
  * @descript 203 deepReadonly
  */
-type X = {
+/* type X = {
   x: {
     a: 1;
     b: "hi";
-  };
+  }; 
   y: "hey";
 };
 
@@ -222,4 +235,4 @@ type Expected = {
 
 type DeepReadonly<T> = T extends never ? T : { readonly [key in keyof T]: T[key] };
 
-type Todo = DeepReadonly<X>; // should be same as `Expected`
+type Todo = DeepReadonly<X>; // should be same as `Expected` */

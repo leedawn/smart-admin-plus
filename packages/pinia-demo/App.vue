@@ -8,6 +8,7 @@
   <My />
   <p>----------------</p>
   <Count />
+  <CountOne />
 </template>
 
 <script setup lang="ts">
@@ -15,6 +16,7 @@ import { useCounterStore } from "./stores/counter";
 import { storeToRefs } from "pinia";
 import My from "./my.vue";
 import Count from "./testPinia/count.vue";
+import CountOne from "./1103/counter.vue";
 
 const store = useCounterStore();
 const { increment } = store;

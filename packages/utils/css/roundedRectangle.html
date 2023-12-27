@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Canvas 圆角矩形</title>
+</head>
+<body>
+  <canvas id="myCanvas" width="200" height="100"></canvas>
+
+  <script>
+    var canvas = document.getElementById('myCanvas');
+    var context = canvas.getContext('2d');
+
+    // 绘制圆角矩形
+    function drawRoundedRect(x, y, width, height, radius) {
+      context.beginPath();
+    //   10+20  10
+      context.moveTo(x + radius, y);   
+    //   10+180 10 10+180 10+80 20
+      context.arcTo(x + width, y, x + width, y + height, radius);
+      context.arcTo(x + width, y + height, x, y + height, radius);
+    //   context.arcTo(x, y + height, x, y, radius);
+    //   context.arcTo(x, y, x + width, y, radius);
+      context.closePath();
+      context.stroke();
+    }
+
+    // 调用绘制函数
+    drawRoundedRect(10, 10, 180, 80, 20);
+  </script>
+</body>
+</html>

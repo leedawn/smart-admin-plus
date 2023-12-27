@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>文件上传</title>
+  </head>
+  <body>
+    <input type="file" id="fileInput" />
+    <button id="uploadButton">上传</button>
+
+    <script>
+      const fileInput = document.getElementById("fileInput");
+      const uploadButton = document.getElementById("uploadButton");
+
+      uploadButton.addEventListener("click", () => {
+        const file = fileInput.files[0];
+        const chunkSize = 1  * 1024; // 1MB 分片大小
+        let start = 0;
+
+        function uploadChunk() {
+          const end = Math.min(start + chunkSize, file.size);
+          const chunk = file.slice(start, end);
+
+          // 使用FormData对象上传分片
+          const formData = new FormData();
+          formData.append("chunk", chunk);
+          formData.append("start", start);
+          formData.append("end", end);
+
+          // 发送分片到服务器
+          fetch("http://localhost:3000/upload", {
+            method: "POST",
+            body: formData,
+          }).then((response) => {
+            if (response.ok) {
+              start = end;
+              if (start < file.size) {
+                uploadChunk();
+              } else {
+                console.log("上传完成");
+              }
+            }
+          });
+        }
+
+        uploadChunk();
+      });
+    </script>
+  </body>
+</html>

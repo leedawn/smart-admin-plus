@@ -1,0 +1,24 @@
+<div>计算从 1 到给定数值的总和</div>
+<input type="text" placeholder="请输入数字" id="num" />
+<button onclick="calc()">开始计算</button>
+<span>计算结果为：<span id="result">-</span></span>
+
+<div>在计算期间你可以填XX表单</div>
+<input type="text" placeholder="请输入姓名" />
+<input type="text" placeholder="请输入年龄" />
+
+<script>
+  function calc() {
+    const num = parseInt(document.getElementById("num").value);
+    let result = 0;
+    let startTime = performance.now();
+    // 计算求和（模拟复杂计算）
+    for (let i = 0; i <= num; i++) {
+      result += i;
+    }
+    // 由于是同步计算，在没计算完成之前下面的代码都无法执行
+    const time = performance.now() - startTime;
+    console.log("总计算花费时间:", time);
+    document.getElementById("result").innerHTML = result;
+  }
+</script>

@@ -28,3 +28,7 @@ export class ConcreteStrategyB implements Strategy {
     return data.reverse();
   }
 }
+
+/**
+ * 
+ */
