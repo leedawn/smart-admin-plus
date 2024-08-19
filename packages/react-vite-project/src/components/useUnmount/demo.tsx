@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import useUnmount from '.';
+import UseMount from './mount';
 
 function TestUnmount() {
   useUnmount(() => {
     alert('unmount');
+  });
+  UseMount(() => {
+    alert('mount');
   });
   return <h1>hello</h1>;
 }

@@ -1,17 +1,23 @@
 <div id="app">
-
+  <input id="input" />
 </div>
 <script>
-  // Create WebSocket connection.
-  const socket = new WebSocket("ws://localhost:8080");
+  function debounce(fn, delay) {
+    let timer = null;
+    return (...args) => {
+      const context = this;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        fn.apply(context, args);
+      }, delay);
+    };
+  }
+  const input = document.getElementById("input");
+  const print = () => {
+    console.log("wow");
+  };
 
-  // Connection opened
-  socket.addEventListener("open", function (event) {
-    socket.send("Hello Server!");
-  });
+  const debouncedPrint = debounce(print, 600);
 
-  // Listen for messages
-  socket.addEventListener("message", function (event) {
-    console.log("Message from server ", event.data);
-  });
+  input.addEventListener("input", debouncedPrint);
 </script>

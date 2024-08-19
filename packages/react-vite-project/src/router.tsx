@@ -10,6 +10,10 @@ import { ReducerDemo } from './components/reducer/demo';
 import { createElement } from 'react';
 import { UseContextDemo } from './components/useContext/demo';
 import TestCache from './components/cache';
+import CreateBreakpoint from './components/createBreakpoint/demo';
+import UseUpdateDemo from './components/useUpdate/demo';
+import UseLoggerDemo from './components/useLogger/demo';
+import WithPreloadDemo from './components/withPreload/demo';
 
 // TODO: 尝试将下面的内容参数化失败
 // const paths = ['/virtual-list'];
@@ -65,6 +69,22 @@ export const router = createBrowserRouter([
       {
         path: '/cache',
         element: <TestCache />
+      },
+      {
+        path: '/breakpoint',
+        element: <CreateBreakpoint />
+      },
+      {
+        path: '/useUpdate',
+        element: <UseUpdateDemo />
+      },
+      {
+        path: '/useLogger',
+        element: <UseLoggerDemo />
+      },
+      {
+        path: '/withPreload',
+        element: <WithPreloadDemo />
       }
       //   { path: '/context-demo', element: <UseContextDemo /> }
     ]
@@ -98,7 +118,21 @@ export function NavigationBar() {
       {/* <a href={'/context-demo'} style={{ paddingRight: '20px' }}>
         context-demo
       </a> */}
-      <a href={'/unmount'}>useUnmount</a>
+      <a href={'/unmount'} style={{ paddingRight: '20px' }}>
+        useUnmount
+      </a>
+      <a href={'/breakPoint'} style={{ paddingRight: '20px' }}>
+        createBreakpoint
+      </a>
+      <a href={'/useUpdate'} style={{ paddingRight: '20px' }}>
+        useUpdate
+      </a>
+      <a href={'/useLogger'} style={{ paddingRight: '20px' }}>
+        useLogger
+      </a>
+      <a href={'/withPreload'} style={{ paddingRight: '20px' }}>
+        withPreloader
+      </a>
     </div>
   );
 }
