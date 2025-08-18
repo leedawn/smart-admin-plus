@@ -1,54 +1,208 @@
-import React, { useState, useMemo, memo } from 'react';
+// import React, { useMemo, useState } from 'react';
+// // import Dialog from './dialog';
 
-function Test() {
-  const [num, setNum] = useState(2020);
-  const [random, setRandom] = useState(0);
+import { useState } from 'react';
 
-  //通过useMemo将函数内的计算结果(返回值)保存到react底层原型链上
-  //totalPrimes为react底层原型链上该函数计算结果的引用
-  const totalPrimes = useMemo(() => {
-    console.log('begin....'); //这里添加一个console.log，方便验证在重新渲染时是否重新执行了一遍计算
+// // class Modal extends React.PureComponent {
+// //   /* 渲染底部按钮 */
+// //   renderFooter = () => {
+// //     const { onOk, onCancel, cancelText, okText, footer } = this.props;
+// //     /* 触发 onOk / onCancel 回调  */
+// //     if (footer && React.isValidElement(footer)) return footer;
+// //     return (
+// //       <div className="model_bottom">
+// //         <div className="model_btn_box">
+// //           <button
+// //             className="searchbtn"
+// //             onClick={(e) => {
+// //               onOk && onOk(e);
+// //             }}
+// //           >
+// //             {okText || '确定'}
+// //           </button>
+// //           <button
+// //             className="concellbtn"
+// //             onClick={(e) => {
+// //               onCancel && onCancel(e);
+// //             }}
+// //           >
+// //             {cancelText || '取消'}
+// //           </button>
+// //         </div>
+// //       </div>
+// //     );
+// //   };
 
-    let total = 0; //声明质数总和对应的变量
+// //   /* 渲染顶部 */
+// //   renderTop = () => {
+// //     const { title, onClose } = this.props;
+// //     return (
+// //       <div className="model_top">
+// //         <p>{title}</p>
+// //         <span className="model_top_close" onClick={() => onClose && onClose()}>
+// //           x
+// //         </span>
+// //       </div>
+// //     );
+// //   };
 
-    //以下为计算num范围内所有质数个数总和的计算代码，不需要认真阅读，只需要知道这是一段“比较复杂的计算代码”即可
-    for (let i = 1; i <= num; i++) {
-      let boo = true;
-      for (let j = 2; j < i; j++) {
-        if (i % j === 0) {
-          boo = false;
-          break;
-        }
-      }
-      if (boo && i !== 1) {
-        total++;
-      }
-    }
-    //复杂的计算代码到此结束
+// //   /* 渲染弹窗内容 */
+// //   renderContent = () => {
+// //     const { content, children } = this.props;
+// //     return React.isValidElement(content) ? content : children ? children : null;
+// //   };
+// //   render() {
+// //     const { visible, width = 500, closeCb, onClose } = this.props;
+// //     return (
+// //       <Dialog
+// //         closeCb={closeCb}
+// //         onClose={onClose}
+// //         visible={visible}
+// //         width={width}
+// //       >
+// //         {this.renderTop()}
+// //         {this.renderContent()}
+// //         {this.renderFooter()}
+// //       </Dialog>
+// //     );
+// //   }
+// // }
 
-    return total; //将质数总和作为返回值return出去
-  }, [num]);
+// /* 挂载方式调用modal */
+// export default function Index() {
+//   //   const [visible, setVisible] = useState(false);
+//   //   const [nameShow, setNameShow] = useState(false);
+//   //   const handleClick = () => {
+//   //     console.log('点击');
+//   //     setVisible(!visible);
+//   //     setNameShow(!nameShow);
+//   //   };
+//   //   /* 防止 Model 的 PureComponent 失去作用 */
+//   //   const [handleClose, handleOk, handleCancel] = useMemo(() => {
+//   //     const Ok = () => console.log('点击确定按钮');
+//   //     const Close = () => setVisible(false);
+//   //     const Cancel = () => console.log('点击取消按钮');
+//   //     return [Close, Ok, Cancel];
+//   //   }, []);
 
-  const clickHandler01 = () => {
-    setNum(num + 1);
+//   return (
+//     <div>
+//       {/* <Modal
+//         onCancel={handleCancel}
+//         onClose={handleClose}
+//         onOk={handleOk}
+//         title={'《React进阶实践指南》'}
+//         visible={visible}
+//         width={700}
+//       >
+//         <div className="feel">
+//           小册阅读感受： <input placeholder="写下你的感受" />
+//           {nameShow && <p>作者： 我不是外星人</p>}
+//         </div>
+//       </Modal> */}
+//       {/* <button
+//         onClick={() => {
+//           setVisible(!visible);
+//           setNameShow(false);
+//         }}
+//       >
+//         model show
+//       </button>
+//       <button onClick={handleClick}> model show ( 显示作者 ) </button> */}
+//     </div>
+//   );
+// }
+
+const Modal = ({ visible, close, children, width, title, ok, cancel }) => {
+  if (!visible) {
+    return <></>;
+  }
+
+  const renderTop = () => {
+    return (
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          display: 'flex',
+          justifyContent: 'space-between',
+          width: '100%'
+        }}
+      >
+        <div style={{ cursor: 'pointer' }}>{title}</div>
+        <div style={{ cursor: 'pointer' }} onClick={close}>
+          x
+        </div>
+      </div>
+    );
   };
 
-  const clickHandler02 = () => {
-    setRandom(Math.floor(Math.random() * 100)); //修改random的值导致整个组件重新渲染
+  const renderContent = () => {
+    return <div style={{ marginTop: 20 }}>{children}</div>;
   };
 
-  const MemoComponent = memo(function tt() {
-    return <div>hello{num}</div>;
-  });
+  const renderFooter = () => {
+    return (
+      <div
+        style={{ position: 'absolute', bottom: 0, right: 10, display: 'flex' }}
+      >
+        <div style={{ paddingRight: 8 }} onClick={cancel}>
+          cancel
+        </div>
+        <div onClick={ok}>ok</div>
+      </div>
+    );
+  };
+
+  return (
+    <div
+      style={{
+        position: 'relative',
+        width,
+        border: '1px solid black',
+        marginTop: 20,
+        minHeight: 150
+      }}
+    >
+      {renderTop()}
+
+      {renderContent()}
+
+      {renderFooter()}
+    </div>
+  );
+};
+
+const Test = () => {
+  const [visible, setVisible] = useState(false);
+
+  const handleOk = () => {
+    console.log('🚀 ~ handleOk ~ handleOk:');
+  };
+
+  const handleCancel = () => {
+    console.log('🚀 ~ handleCancel ~ handleCancel:');
+  };
 
   return (
     <div>
-      {num} - {totalPrimes} - {random}
-      <button onClick={clickHandler01}>num + 1</button>
-      <button onClick={clickHandler02}>random</button>
-      <MemoComponent />
+      <button
+        style={{ cursor: 'pointer' }}
+        onClick={() => setVisible(!visible)}
+      >
+        click
+      </button>
+      <Modal
+        visible={visible}
+        close={() => setVisible(false)}
+        width={700}
+        title={'title'}
+        ok={handleOk}
+        cancel={handleCancel}
+      >
+        <div>hello,this is modal</div>
+      </Modal>
     </div>
   );
-}
-
+};
 export default Test;

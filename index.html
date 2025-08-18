@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Defer Example</title>
+
+    <!-- 使用 defer 并发下载脚本，并按顺序执行 -->
+    <script src="1.js" defer></script>
+    <script src="index.js" defer></script>
+    <script src="another.js" defer></script>
+  </head>
+  <body>
+    <h1>Welcome to the Defer Example Page</h1>
+    <p>This page demonstrates script loading with defer.</p>
+  </body>
+</html>

@@ -14,13 +14,12 @@ function App() {
         <NavigationBar />
       </nav>
       {
-        location.pathname.includes('task') && (
-          <>
-            <Task />
-            <Page />
-          </>
-        )
-
+        // location.pathname.includes('task') && (
+        //   <>
+        //     <Task />
+        //     <Page />
+        //   </>
+        // )  // 无法处理，暂时注释
         // <div>
         //   <Header></Header>
         //   <Qrcode />
@@ -30,5 +29,7 @@ function App() {
     </div>
   );
 }
+
+
 
 export default App;

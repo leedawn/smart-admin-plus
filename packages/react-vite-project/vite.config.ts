@@ -9,7 +9,17 @@ const variablePath = normalizePath(path.resolve('./src/variable.scss'));
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), svgr()],
+  plugins: [
+    react({
+      babel: {
+        plugins: [
+          ['@babel/plugin-proposal-decorators', { legacy: true }],
+          ['@babel/plugin-proposal-class-properties', { legacy: true }]
+        ]
+      }
+    }),
+    svgr()
+  ],
   css: {
     // modules: {
     //   generateScopedName: "[name]__[local]__[hash:base64:5]",
