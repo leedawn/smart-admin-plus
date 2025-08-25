@@ -1,63 +1,65 @@
-import React from "react";
-import ReactDom from "react-dom";
-import { action, autorun, computed, makeAutoObservable, makeObservable, observable, reaction, runInAction } from "mobx";
+import * as React from "react";
+import { render } from "react-dom";
 import { observer } from "mobx-react-lite";
+import { makeObservable, observable, computed, action } from "mobx";
 
-class Timer {
-  constructor() {
-    this.time = 0;
+class Todo {
+  id = Math.random();
+  title = "";
+  finished = false;
+
+  constructor(title) {
     makeObservable(this, {
-      increase: action,
-      time: observable,
-      reset: action.bound,
-      getTotal: computed,
-      likeAxios: action,
+      title: observable,
+      finished: observable,
+      toggle: action
     });
+    this.title = title;
+  }
 
-    autorun(() => {
-      console.log("state change", this.time);
-    });
-
-    reaction(
-      () => this.time,
-      (newVal, oldVal) => {
-        console.log(newVal, oldVal);
-      }
-    );
-  }
-  increase() {
-    if (this.time >= 10) return (this.time = 10);
-    this.time++;
-  }
-  reset() {
-    this.time = 0;
-  }
-  get getTotal() {
-    console.log("getTotal");
-    return this.time + 100;
-  }
-  likeAxios() {
-    const context = this;
-    setTimeout(() => {
-      runInAction(() => {
-        context.time *= 100;
-      });
-    }, 1000);
+  toggle() {
+    this.finished = !this.finished;
   }
 }
-const timer = new Timer();
 
-const TimerView = observer(() => {
-  return (
-    <div>
-      <button onClick={timer.reset}>{timer.time}</button>
-      <button onClick={() => timer.likeAxios()}>axios</button>
-    </div>
-  );
-});
+class TodoList {
+  todos = [];
+  get unfinishedTodoCount() {
+    return this.todos.filter(todo => !todo.finished).length;
+  }
+  constructor(todos) {
+    makeObservable(this, {
+      todos: observable,
+      unfinishedTodoCount: computed
+    });
+    this.todos = todos;
+  }
+}
 
-ReactDom.render(<TimerView />, document.getElementById("root"));
-setInterval(() => {
-  timer.increase();
-  console.log(timer.getTotal);
-}, 1000);
+const TodoListView = observer(({ todoList }) => (
+  <div>
+    <ul>
+      {todoList.todos.map(todo => (
+        <TodoView todo={todo} key={todo.id} />
+      ))}
+    </ul>
+    Tasks left: {todoList.unfinishedTodoCount}
+  </div>
+));
+
+const TodoView = observer(({ todo }) => (
+  <li>
+    <input
+      type="checkbox"
+      checked={todo.finished}
+      onClick={() => todo.toggle()}
+    />
+    {todo.title}
+  </li>
+));
+
+const store = new TodoList([
+  new Todo("Get Coffee"),
+  new Todo("Write simpler code")
+]);
+render(<TodoListView todoList={store} />, document.getElementById("root"));
